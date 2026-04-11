@@ -163,65 +163,53 @@
 body {
   color: #002FA7;
 }
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-.cv-container {
-  margin: 120px;
-  max-width: 700px;
-}
+<body>
 
-/* each CV entry row */
-.cv-row {
-  display: flex;
-  gap: 60px;
-  margin-bottom: 30px;
-}
+<div class="nav">
+  <a href="main.html">home</a>
+  <a href="about.html">about</a>
+  <a href="works.html">works</a>
+</div>
 
-/* LEFT SIDE (DATE) */
-.cv-date {
-  width: 60px;
-  font-size: 12px;
-  opacity: 0.5;
-  text-align: right;
-}
+<div class="cv-grid">
 
-/* RIGHT SIDE */
-.cv-content {
-  flex: 1;
-}
+  <div class="cv-item">
+    <div class="cv-year">2026</div>
+    <div class="cv-title">degree / practice</div>
+    <div class="cv-text">short description of what you do</div>
+  </div>
 
-/* main title */
-.cv-title {
-  font-size: 13px;
-  margin-bottom: 3px;
-}
+  <div class="cv-item">
+    <div class="cv-year">2025</div>
+    <div class="cv-title">internship</div>
+    <div class="cv-text">brief context of work or role</div>
+  </div>
 
-/* secondary line */
-.cv-sub {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-bottom: 8px;
-}
+  <div class="cv-item">
+    <div class="cv-year">2025</div>
+    <div class="cv-title">exhibition</div>
+    <div class="cv-text">something shown / presented</div>
+  </div>
 
-/* hidden/quiet description */
-.cv-desc {
-  font-size: 12px;
-  opacity: 0.8;
-  line-height: 1.5;
-  max-width: 400px;
-}
+  <div class="cv-item">
+    <div class="cv-year">2024</div>
+    <div class="cv-title">project</div>
+    <div class="cv-text">experimental work / research</div>
+  </div>
 
-/* subtle interaction (very important for this aesthetic) */
-.cv-row:hover .cv-title {
-  letter-spacing: 0.5px;
-}
+  <div class="cv-item">
+    <div class="cv-year">2023</div>
+    <div class="cv-title">earlier work</div>
+    <div class="cv-text">archive entry</div>
+  </div>
 
-.cv-row:hover .cv-date {
-  opacity: 1;
-}
-.cv-row:hover {
-  transform: translateX(4px);
-}
+</div>
+
+</body>
+</html> 
