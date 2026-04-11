@@ -2,11 +2,11 @@ const phrases = [
   "my portfolio",
   "안녕하세요",
   "something like that",
-  "nothing is stable",
-  "why are you here",
-  "look closer",
+  "actually though",
+  "welcome",
+  "come closer",
   "this will move",
-  "don't trust this",
+  "good morning",
   "try again",
   "hover me"
 ];
