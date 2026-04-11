@@ -1,0 +1,81 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: white;
+  color: black;
+  overflow: hidden;
+}
+
+/* BLUE SCREEN */
+.blue {
+  background: #002FA7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* NAV */
+.nav {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 12px;
+  z-index: 10;
+}
+
+.nav a {
+  display: block;
+  text-decoration: none;
+  color: black;
+  margin-bottom: 5px;
+}
+
+/* FLOATING TEXT STYLE */
+.floating-text {
+  position: absolute;
+  font-size: 14px;
+  pointer-events: auto;
+  transition: transform 0.2s ease;
+}
+
+.floating-text:hover {
+  transform: scale(1.5) rotate(3deg);
+}
+
+/* GLITCH EFFECT */
+.glitch img {
+  transition: 0.2s;
+}
+
+.glitch:hover img {
+  transform: translate(2px, -2px) skewX(5deg);
+}
+
+/* ABOUT */
+.about {
+  max-width: 400px;
+  margin: 150px auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* GLITCH TEXT */
+.glitch-text:hover {
+  letter-spacing: 2px;
+}
+
+/* WORKS */
+.works {
+  margin: 150px;
+}
+
+.work {
+  display: block;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.work:hover {
+  transform: translateX(10px);
+}
