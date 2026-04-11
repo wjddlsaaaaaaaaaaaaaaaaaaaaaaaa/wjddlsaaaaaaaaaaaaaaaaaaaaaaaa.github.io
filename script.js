@@ -1,7 +1,7 @@
 const phrases = [
-  "this is not a portfolio",
-  "or maybe it is",
-  "click something",
+  "my portfolio",
+  "안녕하세요",
+  "something like that",
   "nothing is stable",
   "why are you here",
   "look closer",
