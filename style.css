@@ -89,6 +89,7 @@ body {
   margin: 120px;
   align-items: flex-start;
 }
+color: black;
 
 /* SMALL “SHY” IMAGE */
 .about-img {
@@ -103,6 +104,8 @@ body {
 
 /* TEXT */
 .about-text {
+ text-decoration: none;
+  color: black;
   max-width: 300px;
   font-size: 13px;
   line-height: 1.6;
@@ -177,41 +180,5 @@ body {
   <a href="main.html">home</a>
   <a href="about.html">about</a>
   <a href="works.html">works</a>
+  <a href="cv.html">works</a>
 </div>
-
-<div class="cv-grid">
-
-  <div class="cv-item">
-    <div class="cv-year">2026</div>
-    <div class="cv-title">degree / practice</div>
-    <div class="cv-text">short description of what you do</div>
-  </div>
-
-  <div class="cv-item">
-    <div class="cv-year">2025</div>
-    <div class="cv-title">internship</div>
-    <div class="cv-text">brief context of work or role</div>
-  </div>
-
-  <div class="cv-item">
-    <div class="cv-year">2025</div>
-    <div class="cv-title">exhibition</div>
-    <div class="cv-text">something shown / presented</div>
-  </div>
-
-  <div class="cv-item">
-    <div class="cv-year">2024</div>
-    <div class="cv-title">project</div>
-    <div class="cv-text">experimental work / research</div>
-  </div>
-
-  <div class="cv-item">
-    <div class="cv-year">2023</div>
-    <div class="cv-title">earlier work</div>
-    <div class="cv-text">archive entry</div>
-  </div>
-
-</div>
-
-</body>
-</html> 
