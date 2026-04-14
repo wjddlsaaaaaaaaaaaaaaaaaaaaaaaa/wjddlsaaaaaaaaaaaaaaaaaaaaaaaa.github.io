@@ -281,3 +281,20 @@ body {
 body {
   overflow-x: hidden;
   overflow-y: auto;
+
+/* Global text color override: keep all site typography black */
+html,
+body {
+  color: #000 !important;
+}
+
+body * {
+  color: inherit;
+}
+
+a,
+a:visited,
+a:hover,
+a:active {
+  color: #000 !important;
+}
