@@ -269,4 +269,29 @@ body {
 .cv-item:hover .cv-title {
   letter-spacing: 0.5px;
 }
+}.cv-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* adjust number of columns */
+  gap: 40px;
+  width: 100%;
+}
+
+.cv-section {
+  display: flex;
+  flex-direction: column;
+}
+.main-content {
+  margin-top: 80px;
+}
+nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+.cv-container {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  gap: 60px;
+  padding: 40px;
 }
