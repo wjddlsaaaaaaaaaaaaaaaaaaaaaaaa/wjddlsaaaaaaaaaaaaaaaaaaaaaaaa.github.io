@@ -306,4 +306,24 @@ body {
 /* SMALL DETAIL POLISH */
 em {
   font-style: italic;
+
+  
+/* Project image sizing fix: keep images within viewport/page bounds */
+.project-image {
+  display: block;
+  width: 100%;
+  max-width: 100vw;
+  height: auto;
+  max-height: 100vh;
+  object-fit: contain;
+  margin: 0 auto 16px;
+}
+
+.project-page {
+  width: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
