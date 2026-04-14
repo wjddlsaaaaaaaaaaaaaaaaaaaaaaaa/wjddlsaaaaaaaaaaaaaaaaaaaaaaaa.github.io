@@ -182,3 +182,44 @@ body {
   <a href="works.html">works</a>
   <a href="cv.html">works</a>
 </div>
+
+/* ABOUT PAGE LAYOUT */
+.about-container {
+  display: flex;
+  gap: 40px;
+  margin: 120px;
+  align-items: flex-start;
+}
+
+/* SMALL “SHY” IMAGE */
+.about-img {
+  width: 120px;
+  opacity: 0.85;
+  transition: 0.3s;
+}
+
+.about-img:hover {
+  opacity: 1;
+}
+
+/* TEXT */
+.about-text {
+  max-width: 300px;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* SOCIAL LINKS */
+.socials {
+  margin-top: 20px;
+  font-size: 12px;
+}
+
+.socials a {
+  text-decoration: none;
+  color: black;
+}
+
+.socials a:hover {
+  text-decoration: underline;
+}
