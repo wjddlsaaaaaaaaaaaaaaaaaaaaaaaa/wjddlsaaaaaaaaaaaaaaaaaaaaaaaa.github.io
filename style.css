@@ -222,4 +222,51 @@ body {
 
 .socials a:hover {
   text-decoration: underline;
+
+  .cv-grid {
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  flex-wrap: wrap;
+
+  padding: 120px 80px;
+  gap: 80px;
+
+  box-sizing: border-box;
+}
+
+/* each “floating archive block” */
+.cv-item {
+  width: 200px;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* YEAR (quiet anchor point) */
+.cv-year {
+  opacity: 0.5;
+  margin-bottom: 6px;
+}
+
+/* TITLE */
+.cv-title {
+  margin-bottom: 6px;
+}
+
+/* TEXT */
+.cv-text {
+  opacity: 0.8;
+}
+
+/* subtle instability (important for aesthetic) */
+.cv-item:hover {
+  transform: translateY(-3px);
+  transition: 0.2s;
+}
+
+/* optional: slight text shift on hover */
+.cv-item:hover .cv-title {
+  letter-spacing: 0.5px;
+}
 }
