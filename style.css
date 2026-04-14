@@ -5,7 +5,6 @@
   background: white;
   color: black;
   overflow: hidden;
-}
 
 /* BLUE SCREEN */
 .blue {
@@ -18,7 +17,7 @@
 
 /* NAV */
 nav {
-  position: relative;
+  position: ;
   z-index: 10;
 }
 .project-page {
