@@ -1,10 +1,111 @@
-}body {
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body.cv-page {
+      }body {
   margin: 0;
   font-family: Arial, sans-serif;
   background: white;
   color: black;
   overflow: hidden;
+    }
 
+    .cv-page .nav {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 20;
+    }
+
+    .cv-page .nav a {
+      display: block;
+      margin-bottom: 8px;
+      color: #000;
+      text-decoration: none;
+      font-size: 12px;
+      line-height: 1.2;
+    }
+
+    .cv-layout {
+      margin-left: 220px;
+      padding: 22px 30px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 42px;
+      align-items: start;
+    }
+
+    .cv-intro {
+      font-size: 12px;
+      line-height: 1.35;
+      margin: 0 0 36px;
+    }
+
+    .cv-section-title {
+      font-size: 20px;
+      line-height: 1;
+      margin: 28px 0 12px;
+      letter-spacing: 0.4px;
+    }
+
+    .cv-entry {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      column-gap: 14px;
+      margin-bottom: 8px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .cv-year {
+      font-weight: normal;
+    }
+
+    .cv-text {
+      margin: 0;
+    }
+
+    .cv-text em {
+      font-style: italic;
+    }
+
+    @media (max-width: 1200px) {
+      .cv-layout {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .cv-page .nav {
+        position: static;
+        padding: 20px 20px 0;
+      }
+
+      .cv-layout {
+        margin-left: 0;
+        padding: 20px;
+        grid-template-columns: 1fr;
+        gap: 26px;
+      }
+
+      .cv-section-title {
+        font-size: 30px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<body class="cv-page">
+
+<div class="nav">
+  <a href="main.html">home</a>
+  <a href="about.html">about</a>
+  <a href="works.html">works</a>
+</div>
 <main class="cv-layout">
   <section>
     <p class="cv-intro">Jennie Park (b. Seoul, KR) is an artist working across photography + moving image.</p>
@@ -23,15 +124,10 @@
   
     <h2 class="cv-section-title">AWARDS </h2>
 
-
-
-
     <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">MCB School Prize Winner</p></article>
     <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">Cinemagic Young Filmmaker Award</p></article>
     <article class="cv-entry"><span class="cv-year">2023</span><p class="cv-text">MCB School Prize Winner</p></article>
   </section>
-
-
 
 
     <h2 class="cv-section-title">EDUCATION</h2>
@@ -40,3 +136,6 @@
     <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">Art + Design Foundation Year, York College </p></article>
   </section>
 </main>
+
+</body>
+</html>
