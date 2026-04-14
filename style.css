@@ -226,14 +226,14 @@ body {
   text-decoration: underline;
 
   /* FULL WIDTH CV */
-.cv-wrapper {
-  display: flex;
-  gap: 120px;
+
+  .cv-wrapper {
+  margin-left: 160px;
+  padding-top: 120px;
+}
 
   padding: 120px 60px;
 
-  width: 100vw;
-  overflow-x: auto;
 }
 
 /* EACH COLUMN */
