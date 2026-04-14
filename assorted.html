@@ -1,22 +1,41 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<div class="project-page">
-
-  <!-- TITLE -->
-  <div class="project-header">
-    Films + Music Videos (stills)
-    MCB school prize winner (2023+2024) + Cinemagic Young Filmmaker Award
-
-  <!-- IMAGE IN FLOW -->
-  <img src="Slide5.jpeg" class="project-image">
-    <img src="Slide6.jpeg" class="project-image">
-  <img src="Slide7.jpeg" class="project-image">
-    <img src="Slide8.jpeg" class="project-image">
-</body>
-</html>
+diff --git a/assorted.html b/assorted.html
+index bf99c7b029ac8ecfc829ee9586170ad3725d160d..7b7f5cbad38750cac33ed35aa5c07fc53efde1a8 100644
+--- a/assorted.html
++++ b/assorted.html
+@@ -1,22 +1,36 @@
+ <!DOCTYPE html>
+ <html>
+ <head>
+   <link rel="stylesheet" href="style.css">
++  <style>
++    .project-image {
++      display: block;
++      width: 100vw;
++      height: 100vh;
++      max-width: 100%;
++      object-fit: contain;
++      margin: 0 auto;
++    }
++
++    .project-page {
++      width: 100%;
++    }
++  </style>
+ </head>
+ 
+ <body>
+ 
+ <div class="project-page">
+ 
+   <!-- TITLE -->
+   <div class="project-header">
+     Films + Music Videos (stills)
+     MCB school prize winner (2023+2024) + Cinemagic Young Filmmaker Award
+ 
+   <!-- IMAGE IN FLOW -->
+   <img src="Slide5.jpeg" class="project-image">
+     <img src="Slide6.jpeg" class="project-image">
+   <img src="Slide7.jpeg" class="project-image">
+     <img src="Slide8.jpeg" class="project-image">
+ </body>
+ </html>
