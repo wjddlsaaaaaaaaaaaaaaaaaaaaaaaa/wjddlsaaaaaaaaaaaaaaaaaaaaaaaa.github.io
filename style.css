@@ -225,43 +225,6 @@ body {
 .socials a:hover {
   text-decoration: underline;
 
-  /* FULL WIDTH CV */
-
-  .cv-wrapper {
-  margin-left: 160px;
-  padding-top: 120px;
-}
-
-  padding: 120px 60px;
-
-}
-
-/* EACH COLUMN */
-.cv-column {
-  min-width: 200px;
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-/* TEXT STYLE (ALL BLACK, NO OVERRIDE FONT) */
-.cv-year {
-  opacity: 0.5;
-  margin-bottom: 10px;
-}
-
-.cv-role {
-  margin-bottom: 5px;
-}
-
-.cv-place {
-  opacity: 0.7;
-}
-
-/* IMPORTANT: FORCE BLACK TEXT */
-.cv-wrapper,
-.cv-wrapper * {
-  color: black !important;
-}
 
 /* Project image sizing fix: keep images within viewport/page bounds */
 .project-image {
@@ -282,3 +245,65 @@ body {
   overflow-x: hidden;
   overflow-y: auto;
 
+  body {
+  margin: 0;
+  background: white;
+  font-family: Helvetica, Arial, sans-serif;
+  color: black;
+}
+
+/* CONTAINER */
+.cv-container {
+  width: 680px;
+  margin-left: 140px;
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
+  .cv-container {
+  margin-left: 200px; /* push right so it clears nav */
+}
+  .cv-text {
+  letter-spacing: 0.01em;
+}
+
+/* INTRO */
+.cv-intro {
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 60px;
+  max-width: 500px;
+}
+
+/* SECTION */
+.cv-section {
+  margin-bottom: 60px;
+}
+
+.cv-section-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+/* ENTRY */
+.cv-entry {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  margin-bottom: 14px;
+}
+
+.cv-year {
+  font-size: 12px;
+  color: #666;
+}
+
+.cv-text {
+  font-size: 13px;
+  margin: 0;
+}
+
+/* SMALL DETAIL POLISH */
+em {
+  font-style: italic;
+}
