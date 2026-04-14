@@ -1,50 +1,154 @@
-<!DOCTYPE html>
 <html>
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    body.cv-page {
+      margin: 0;
+      background: #ececec;
+      color: #000;
+      font-family: "Courier New", Courier, monospace;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .cv-page .nav {
+      position: fixed;
+      top: 24px;
+      left: 24px;
+      z-index: 20;
+    }
+
+    .cv-page .nav a {
+      display: block;
+      margin-bottom: 8px;
+      color: #000;
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1.2;
+    }
+
+    .cv-layout {
+      margin-left: 220px;
+      padding: 22px 30px 40px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(260px, 1fr));
+      gap: 42px;
+      align-items: start;
+    }
+
+    .cv-intro {
+      font-size: 19px;
+      line-height: 1.35;
+      margin: 0 0 36px;
+    }
+
+    .cv-section-title {
+      font-size: 34px;
+      line-height: 1;
+      margin: 28px 0 12px;
+      letter-spacing: 0.4px;
+    }
+
+    .cv-entry {
+      display: grid;
+      grid-template-columns: 58px 1fr;
+      column-gap: 14px;
+      margin-bottom: 8px;
+      font-size: 15px;
+      line-height: 1.45;
+    }
+
+    .cv-year {
+      font-weight: normal;
+    }
+
+    .cv-text {
+      margin: 0;
+    }
+
+    .cv-text em {
+      font-style: italic;
+    }
+
+    @media (max-width: 1200px) {
+      .cv-layout {
+        grid-template-columns: repeat(2, minmax(250px, 1fr));
+      }
+    }
+
+    @media (max-width: 860px) {
+      .cv-page .nav {
+        position: static;
+        padding: 20px 20px 0;
+      }
+
+      .cv-layout {
+        margin-left: 0;
+        padding: 20px;
+        grid-template-columns: 1fr;
+        gap: 26px;
+      }
+
+      .cv-section-title {
+        font-size: 30px;
+      }
+    }
+  </style>
 </head>
 
 <body>
+<body class="cv-page">
 
 <div class="nav">
   <a href="main.html">home</a>
   <a href="about.html">about</a>
   <a href="works.html">works</a>
 </div>
-
-<div class="cv-wrapper">
-
-  <div class="cv-column">
-    <p class="cv-year">2026</p>
-    <p class="cv-role">BA Fine Art</p>
-    <p class="cv-place">University of St Andrews</p>
-  </div>
-
-  <div class="cv-column">
-    <p class="cv-year">2025</p>
-    <p class="cv-role">Exhibition</p>
-    <p class="cv-place">Group Show, London</p>
-  </div>
-
-  <div class="cv-column">
-    <p class="cv-year">2025</p>
-    <p class="cv-role">Internship</p>
-    <p class="cv-place">Studio / Organisation</p>
-  </div>
-
-  <div class="cv-column">
-    <p class="cv-year">2024</p>
-    <p class="cv-role">Project</p>
-    <p class="cv-place">Independent research</p>
-  </div>
-
-  <div class="cv-column">
-    <p class="cv-year">2023</p>
-    <p class="cv-role">Earlier work</p>
-    <p class="cv-place">Archive entry</p>
-  </div>
+<main class="cv-layout">
+  <section>
+    <p class="cv-intro">Jennie Park (b. Belfast, UK) is an artist working across photography, moving image and installation between Scotland and Seoul.</p>
 
 </div>
+    <h2 class="cv-section-title">ONE + TWO PERSON EXHIBITIONS</h2>
+
+    <article class="cv-entry"><span class="cv-year">2026</span><p class="cv-text"><em>haute***</em>, independent project space, St Andrews, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2025</span><p class="cv-text"><em>dont walk</em>, project room, Edinburgh, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2025</span><p class="cv-text"><em>"i remember in flushes and flares"</em>, artist photobook launch, St Andrews, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text"><em>memento mori</em>, student-led exhibition, Dundee, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text"><em>In Practice</em>, SculptureCenter study project, New York, NY</p></article>
+  </section>
+
+  <section>
+    <h2 class="cv-section-title">GROUP EXHIBITIONS</h2>
+
+    <article class="cv-entry"><span class="cv-year">2026</span><p class="cv-text"><em>BA Fine Art Degree Show</em>, University of St Andrews, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2025</span><p class="cv-text"><em>Switchboard</em>, Berlin, Germany</p></article>
+    <article class="cv-entry"><span class="cv-year">2025</span><p class="cv-text"><em>[Beetle]</em>, David Peter Francis, New York, NY</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text"><em>Art Foundation Final Show</em>, St Andrews, UK</p></article>
+    <article class="cv-entry"><span class="cv-year">2023</span><p class="cv-text"><em>Films + Music Videos (stills)</em>, Belfast, UK</p></article>
+
+    <h2 class="cv-section-title">AWARDS + RESIDENCIES</h2>
+
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">MCB School Prize Winner</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">Cinemagic Young Filmmaker Award</p></article>
+    <article class="cv-entry"><span class="cv-year">2023</span><p class="cv-text">MCB School Prize Winner</p></article>
+  </section>
+
+  <section>
+    <h2 class="cv-section-title">SELECTED WRITING</h2>
+
+    <article class="cv-entry"><span class="cv-year">2026</span><p class="cv-text">Park, Jennie. “Notes on Fractured Memory.” <em>Artist Text</em>.</p></article>
+    <article class="cv-entry"><span class="cv-year">2025</span><p class="cv-text">Kim, Ara. “Image, absence, and trace.” <em>Studio Journal</em>.</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">Lee, Minji. “On emerging image-makers.” <em>Art Review Seoul</em>.</p></article>
+
+    <h2 class="cv-section-title">EDUCATION</h2>
+
+    <article class="cv-entry"><span class="cv-year">2026</span><p class="cv-text">BA Fine Art, University of St Andrews</p></article>
+    <article class="cv-entry"><span class="cv-year">2024</span><p class="cv-text">Art + Design Foundation Year</p></article>
+  </section>
+</main>
 
 </body>
 </html>
