@@ -2,7 +2,7 @@ const phrases = [
   "my portfolio",
   "안녕하세요",
   "something like that",
-  "actually though",
+  "everyone get helvetica",
   "welcome",
   "come closer",
   "this will move",
