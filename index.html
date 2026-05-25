@@ -28,36 +28,6 @@
       height: auto;
     }
 
-    /* half-and-half reveal: clip from centre outward */
-    .slide .reveal-top,
-    .slide .reveal-bot {
-      position: absolute;
-      left: 0; right: 0;
-      overflow: hidden;
-      transition: height var(--reveal-dur) cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .slide .reveal-top {
-      top: 0;
-      height: 0;        /* grows down to 50% */
-    }
-
-    .slide .reveal-bot {
-      bottom: 0;
-      height: 0;        /* grows up to 50% */
-    }
-
-    .slide .reveal-top img,
-    .slide .reveal-bot img {
-      position: absolute;
-      left: 0;
-    }
-
-    /* top half: img sits at top of container, no offset */
-    .slide .reveal-top img { top: 0; }
-
-    /* bot half: img sits flush at bottom — offset so it shows the bottom half */
-    .slide .reveal-bot img { bottom: 0; }
 
     .nav {
       position: fixed;
