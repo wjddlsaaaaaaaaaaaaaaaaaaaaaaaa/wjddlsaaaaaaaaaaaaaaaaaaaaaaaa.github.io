@@ -24,7 +24,6 @@
 
     canvas {
       display: block;
-      max-height: 100vh;
     }
 
     #hit-left, #hit-right {
@@ -100,7 +99,7 @@
 <body>
 
 <nav id="nav">
-  <a href="index.html">home</a>
+  <a href="index.html">index</a>
   <a href="works.html">works</a>
   <a href="cv.html">cv</a>
 </nav>
@@ -138,15 +137,22 @@
     return 1 + Math.ceil((numPages - 1) / 2);
   }
 
-  async function renderPage(pageNum, maxH) {
+  async function renderPage(pageNum, maxH, maxW) {
     const page     = await pdf.getPage(pageNum);
     const viewport = page.getViewport({ scale: 1 });
-    const scale    = (maxH / viewport.height) * 0.95;
-    const scaled   = page.getViewport({ scale });
+    const dpr      = window.devicePixelRatio || 1;
 
-    const canvas  = document.createElement('canvas');
-    canvas.width  = scaled.width;
-    canvas.height = scaled.height;
+    // fit within available space
+    const scaleH = maxH / viewport.height;
+    const scaleW = maxW / viewport.width;
+    const scale  = Math.min(scaleH, scaleW) * 0.95 * dpr;
+    const scaled = page.getViewport({ scale });
+
+    const canvas        = document.createElement('canvas');
+    canvas.width        = scaled.width;
+    canvas.height       = scaled.height;
+    canvas.style.width  = (scaled.width  / dpr) + 'px';
+    canvas.style.height = (scaled.height / dpr) + 'px';
 
     await page.render({
       canvasContext: canvas.getContext('2d'),
@@ -158,9 +164,14 @@
 
   async function showSpread() {
     viewer.innerHTML = '';
-    const pages    = spreadPages();
-    const maxH     = window.innerHeight;
-    const canvases = await Promise.all(pages.map(p => renderPage(p, maxH)));
+    const pages  = spreadPages();
+    const maxH   = window.innerHeight;
+    // for a two page spread each page gets half the width
+    const maxW   = pages.length === 2
+      ? window.innerWidth / 2
+      : window.innerWidth;
+
+    const canvases = await Promise.all(pages.map(p => renderPage(p, maxH, maxW)));
     canvases.forEach(c => viewer.appendChild(c));
     counter.textContent = `${spread + 1} / ${totalSpreads()}`;
   }
@@ -189,6 +200,8 @@
     if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
     touchX = null;
   });
+
+  window.addEventListener('resize', () => showSpread());
 
   (async () => {
     try {
