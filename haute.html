@@ -20,7 +20,6 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0;
     }
 
     canvas {
@@ -51,6 +50,19 @@
       z-index: 20;
       pointer-events: none;
     }
+
+    #pdf-link {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 2rem;
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      z-index: 20;
+      text-decoration: none;
+    }
+
+    #pdf-link:hover { color: #111; }
 
     #nav {
       position: fixed;
@@ -87,16 +99,6 @@
 </head>
 <body>
 
-  <a href="https://drive.google.com/file/d/140Z9A4a7aymyHAfnQ2Y4jDAmaNroupMb/view?usp=sharing" target="_blank" id="pdf-link">view pdf</a>
- 
-<div id="loading">loading...</div>
- 
-<div id="viewer" style="display:none">
-  <div id="canvas-container">
-    <canvas id="pdf-canvas"></canvas>
-  </div>
-</div>
-
 <nav id="nav">
   <a href="index.html">index</a>
   <a href="works.html">works</a>
@@ -109,24 +111,25 @@
 <div id="hit-right"></div>
 <div id="counter"></div>
 
+<a href="https://drive.google.com/file/d/140Z9A4a7aymyHAfnQ2Y4jDAmaNroupMb/view?usp=sharing" target="_blank" id="pdf-link">view pdf</a>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  const PDF_URL = 'HAUTEFINALPRINT.pdf';
+  const PDF_URL = '/HAUTEFINALPRINT.pdf';
   const viewer  = document.getElementById('viewer');
   const counter = document.getElementById('counter');
   const loading = document.getElementById('loading');
 
-  let pdf       = null;
-  let numPages  = 0;
-  let spread    = 0; // 0 = cover (page 1 alone), 1 = pages 2-3, 2 = pages 4-5 ...
+  let pdf      = null;
+  let numPages = 0;
+  let spread   = 0;
 
-  // Returns array of 1-indexed page numbers for current spread
   function spreadPages() {
     if (spread === 0) return [1];
-    const left = spread * 2;      // page 2, 4, 6 ...
+    const left  = spread * 2;
     const right = left + 1;
     return right <= numPages ? [left, right] : [left];
   }
@@ -138,12 +141,12 @@
   async function renderPage(pageNum, maxH) {
     const page     = await pdf.getPage(pageNum);
     const viewport = page.getViewport({ scale: 1 });
-    const scale    = maxH / viewport.height;
+    const scale    = (maxH / viewport.height) * 0.95;
     const scaled   = page.getViewport({ scale });
 
-    const canvas   = document.createElement('canvas');
-    canvas.width   = scaled.width;
-    canvas.height  = scaled.height;
+    const canvas  = document.createElement('canvas');
+    canvas.width  = scaled.width;
+    canvas.height = scaled.height;
 
     await page.render({
       canvasContext: canvas.getContext('2d'),
@@ -155,14 +158,11 @@
 
   async function showSpread() {
     viewer.innerHTML = '';
-    const pages  = spreadPages();
-    const maxH   = window.innerHeight;
-
+    const pages    = spreadPages();
+    const maxH     = window.innerHeight;
     const canvases = await Promise.all(pages.map(p => renderPage(p, maxH)));
     canvases.forEach(c => viewer.appendChild(c));
-
-    const total = totalSpreads();
-    counter.textContent = `${spread + 1} / ${total}`;
+    counter.textContent = `${spread + 1} / ${totalSpreads()}`;
   }
 
   function prev() {
@@ -181,7 +181,6 @@
     if (e.key === 'ArrowRight') next();
   });
 
-  // touch swipe
   let touchX = null;
   document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
   document.addEventListener('touchend', e => {
@@ -192,11 +191,14 @@
   });
 
   (async () => {
-    const loadingTask = pdfjsLib.getDocument(PDF_URL);
-    pdf      = await loadingTask.promise;
-    numPages = pdf.numPages;
-    loading.remove();
-    showSpread();
+    try {
+      pdf      = await pdfjsLib.getDocument(PDF_URL).promise;
+      numPages = pdf.numPages;
+      loading.remove();
+      showSpread();
+    } catch (e) {
+      loading.textContent = 'could not load pdf — check the file path';
+    }
   })();
 </script>
 </body>
