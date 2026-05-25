@@ -102,7 +102,7 @@
   ];
 
   const DURATION_MIN = 1000;
-  const DURATION_MAX = 3000;
+  const DURATION_MAX = 4000;
 
   function randInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -131,27 +131,6 @@
     // drastically varied but won't bleed off screen
     const sizes = [15, 20, 25, 35, 45, 55, 60];
     return sizes[randInt(0, sizes.length - 1)];
-  }
-
-  // glitch effect — rapidly swap src a few times before settling
-  function glitchIn(img, realSrc) {
-    const glitchSrcs = PHOTOS
-      .map(p => p.src)
-      .filter(s => s !== realSrc)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 4);
-
-    let step = 0;
-    const flicker = () => {
-      if (step < glitchSrcs.length) {
-        img.src = glitchSrcs[step];
-        step++;
-        setTimeout(flicker, randInt(30, 120));
-      } else {
-        img.src = realSrc;
-      }
-    };
-    flicker();
   }
 
   const stage = document.getElementById('stage');
@@ -187,13 +166,6 @@
     const pos     = randPos();
     const { el, img } = makeSlide(photo, sizePct, pos);
 
-    // for intro: extra glitchy with more flickers
-    const glitchCount = isIntro ? 8 : 3;
-    const glitchSrcs  = PHOTOS
-      .map(p => p.src)
-      .filter(s => s !== photo.src)
-      .sort(() => Math.random() - 0.5)
-      .slice(0, glitchCount);
 
     // append immediately so glitch is visible
     if (current) current.remove();
