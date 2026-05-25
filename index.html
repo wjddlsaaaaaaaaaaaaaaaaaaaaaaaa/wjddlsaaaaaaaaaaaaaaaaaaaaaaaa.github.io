@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>wjddls</title>
+  <link rel="stylesheet" href="style.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -29,11 +30,7 @@
       height: auto;
     }
 
-    .slide.grow img {
-      transition: max-width 1.2s ease, max-height 1.2s ease;
-    }
-
-    #nav {
+    .nav {
       position: fixed;
       top: 2rem;
       left: 2rem;
@@ -47,15 +44,13 @@
       mix-blend-mode: multiply;
     }
 
-    #nav a {
+    .nav a {
       color: #111;
       text-decoration: none;
       transition: opacity 0.15s;
     }
 
-    #nav a:hover {
-      opacity: 0.4;
-    }
+    .nav a:hover { opacity: 0.4; }
 
     body::after {
       content: '';
@@ -73,11 +68,11 @@
 
 <div id="stage"></div>
 
-<nav id="nav">
-  <a href="/about.html">about</a>
-  <a href="/works.html">works</a>
-  <a href="/cv.html">cv</a>
-</nav>
+<div class="nav">
+  <a href="index.html">home</a>
+  <a href="about.html">about</a>
+  <a href="cv.html">cv</a>
+</div>
 
 <script>
   const PHOTOS = [
@@ -113,35 +108,72 @@
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
-  function randPos() {
-    return {
-      left: randInt(0, 80) + 'vw',
-      top:  randInt(0, 80) + 'vh',
-    };
+  // mostly central, occasionally off-centre
+  function randPos(maxW, maxH) {
+    const offCentre = Math.random() < 0.25;
+    if (offCentre) {
+      // off centre but still within bounds
+      const side = Math.random() < 0.5 ? 'left' : 'right';
+      const x = side === 'left'
+        ? randInt(5, 25)
+        : randInt(65, 85);
+      const y = randInt(10, 75);
+      return { x, y };
+    } else {
+      // central cluster
+      const x = randInt(25, 60);
+      const y = randInt(20, 65);
+      return { x, y };
+    }
   }
 
   function randSize() {
-    return randInt(10, 75) + 'vw';
+    // drastically varied but won't bleed off screen
+    const sizes = [15, 20, 25, 35, 45, 55, 60];
+    return sizes[randInt(0, sizes.length - 1)];
+  }
+
+  // glitch effect — rapidly swap src a few times before settling
+  function glitchIn(img, realSrc) {
+    const glitchSrcs = PHOTOS
+      .map(p => p.src)
+      .filter(s => s !== realSrc)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
+
+    let step = 0;
+    const flicker = () => {
+      if (step < glitchSrcs.length) {
+        img.src = glitchSrcs[step];
+        step++;
+        setTimeout(flicker, randInt(30, 120));
+      } else {
+        img.src = realSrc;
+      }
+    };
+    flicker();
   }
 
   const stage = document.getElementById('stage');
   let current = null;
-  let introComplete = false;
   let idx = 0;
+  let isIntro = true;
 
-  function makeSlide(photo, size, pos) {
+  function makeSlide(photo, sizePct, pos) {
     const el = document.createElement('a');
     el.className = 'slide';
-    el.href = '/works.html';
-    el.style.left = pos.left;
-    el.style.top  = pos.top;
+    el.href = 'works.html';
+
+    // position so image stays within viewport
+    el.style.left = pos.x + 'vw';
+    el.style.top  = pos.y + 'vh';
+    el.style.transform = 'translate(-50%, -50%)';
 
     const img = document.createElement('img');
-    img.src = photo.src;
     img.alt = '';
     img.draggable = false;
-    img.style.maxWidth  = size;
-    img.style.maxHeight = '90vh';
+    img.style.maxWidth  = sizePct + 'vw';
+    img.style.maxHeight = '80vh';
 
     el.appendChild(img);
     return { el, img };
@@ -151,54 +183,42 @@
     const photo = PHOTOS[idx % PHOTOS.length];
     idx++;
 
-    const size = randSize();
-    const pos  = randPos();
-    const { el, img } = makeSlide(photo, size, pos);
+    const sizePct = randSize();
+    const pos     = randPos();
+    const { el, img } = makeSlide(photo, sizePct, pos);
 
-    img.onload = () => {
-      if (current) current.remove();
-      stage.appendChild(el);
-      current = el;
-      setTimeout(showNext, randInt(DURATION_MIN, DURATION_MAX));
+    // for intro: extra glitchy with more flickers
+    const glitchCount = isIntro ? 8 : 3;
+    const glitchSrcs  = PHOTOS
+      .map(p => p.src)
+      .filter(s => s !== photo.src)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, glitchCount);
+
+    // append immediately so glitch is visible
+    if (current) current.remove();
+    stage.appendChild(el);
+    current = el;
+
+    let step = 0;
+    const flicker = () => {
+      if (step < glitchSrcs.length) {
+        img.src = glitchSrcs[step];
+        step++;
+        setTimeout(flicker, isIntro ? randInt(20, 80) : randInt(30, 100));
+      } else {
+        img.src = photo.src;
+        if (isIntro && idx === 1) {
+          isIntro = false;
+        }
+        setTimeout(showNext, randInt(DURATION_MIN, DURATION_MAX));
+      }
     };
 
-    img.onerror = () => showNext();
+    img.src = glitchSrcs[0] || photo.src;
+    flicker();
   }
 
-  function startIntro() {
-    const photo = PHOTOS[0];
-    const initSize = randInt(10, 30) + 'vw';
-    const pos = randPos();
-    const { el, img } = makeSlide(photo, initSize, pos);
-
-    // part 1: image loads in glitchy at small-ish size
-    img.onload = () => {
-      stage.appendChild(el);
-      current = el;
-
-      // part 2: after a beat, grow it
-      setTimeout(() => {
-        el.classList.add('grow');
-        const bigSize = (parseInt(initSize) + randInt(20, 40)) + 'vw';
-        img.style.maxWidth = bigSize;
-
-        // after grow completes, start cycling
-        setTimeout(() => {
-          introComplete = true;
-          idx = 1;
-          showNext();
-        }, 1400);
-      }, randInt(600, 1200));
-    };
-
-    img.onerror = () => {
-      introComplete = true;
-      idx = 1;
-      showNext();
-    };
-  }
-
-  // work links
   function showWorkLink() {
     const work = WORKS[randInt(0, WORKS.length - 1)];
 
@@ -224,7 +244,7 @@
   }
 
   PHOTOS.sort(() => Math.random() - 0.5);
-  startIntro();
+  showNext();
   setTimeout(showWorkLink, randInt(4000, 7000));
 </script>
 </body>
