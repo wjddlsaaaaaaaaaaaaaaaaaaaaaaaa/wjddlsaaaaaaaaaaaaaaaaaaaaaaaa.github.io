@@ -33,6 +33,17 @@
       height: auto;
     }
 
+    .work-link {
+      position: fixed;
+      z-index: 997;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      color: blue;
+      text-decoration: underline;
+      cursor: pointer;
+      pointer-events: all;
+    }
+
     #nav {
       position: fixed;
       top: 2rem;
@@ -97,6 +108,15 @@
     { src: 'DSC00766.jpg' },
   ];
 
+  const WORKS = [
+    { title: 'haute***',                          href: 'haute.html' },
+    { title: 'dont walk',                         href: 'dontwalk.html' },
+    { title: 'memento mori',                      href: 'mementomori.html' },
+    { title: '"i remember in flushes and flares"', href: 'irememberinflushesandflares.html' },
+    { title: 'art foundation',                    href: 'artfoundation.html' },
+    { title: 'assorted',                          href: 'assorted.html' },
+  ];
+
   const DURATION_MIN = 1000;
   const DURATION_MAX = 3000;
 
@@ -128,9 +148,7 @@
     el.appendChild(img);
 
     img.onload = () => {
-      if (current) {
-        current.remove();
-      }
+      if (current) current.remove();
       stage.appendChild(el);
       current = el;
       setTimeout(showNext, randInt(DURATION_MIN, DURATION_MAX));
@@ -139,8 +157,34 @@
     img.onerror = () => showNext();
   }
 
+  function showWorkLink() {
+    const work = WORKS[randInt(0, WORKS.length - 1)];
+
+    const a = document.createElement('a');
+    a.className = 'work-link';
+    a.textContent = work.title;
+    a.href = work.href;
+    a.target = '_blank';
+
+    // random position, kept away from edges
+    a.style.left = randInt(5, 80) + 'vw';
+    a.style.top  = randInt(10, 85) + 'vh';
+
+    document.body.appendChild(a);
+
+    // disappear after a short random moment
+    const stayDuration = randInt(800, 2500);
+    setTimeout(() => a.remove(), stayDuration);
+
+    // schedule next appearance — infrequent, feels like an afterthought
+    setTimeout(showWorkLink, randInt(3000, 8000));
+  }
+
   PHOTOS.sort(() => Math.random() - 0.5);
   showNext();
+
+  // first work link appears after a delay
+  setTimeout(showWorkLink, randInt(2000, 5000));
 </script>
 </body>
 </html>
