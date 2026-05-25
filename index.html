@@ -21,27 +21,23 @@
 
     .slide {
       position: absolute;
-      display: block;
       opacity: 0;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      /* transition duration set dynamically via JS */
+    }
 
-.slide {
-  /* remove fixed width/height from the JS, or override here */
-  width: auto;
-  height: auto;
-}
+    .slide img {
+      display: block;
+      max-height: 90vh;
+      width: auto;
+      height: auto;
+    }
 
-.slide img {
-  display: block;
-  max-width: 90vw;
-  max-height: 90vh;
-  width: auto;
-  height: auto;
-  object-fit: unset;
-}
+    .slide.visible {
+      opacity: 1;
+    }
+
     #nav {
       position: fixed;
       top: 2rem;
@@ -90,46 +86,42 @@
 
 <script>
   const PHOTOS = [
-    { src: 'IMG_9587-2.JPG',                 size: 'md' },
-    { src: 'P1051707.JPG',                 size: 'sm' },
-    { src: 'P1079588.JPG',                 size: 'lg' },,
-    { src: 'Untitled_20250628_155041.jpg', size: 'sm' },
-    { src: 'Untitled-6.jpg',              size: 'lg' },
-    { src: 'P1081468.jpg',                size: 'md' },
-     { src: 'P1092662.JPG',                size: 'md' },
-    { src: 'IMG_0177.jpg',                size: 'lg' },
-    { src: 'P1010315.jpg',                size: 'md' },
-    { src: 'P1010319.jpg',                size: 'sm' },
-    { src: 'P1010268.jpg',                size: 'lg' },
-    { src: 'P1094019.jpg',                size: 'md' },
-    { src: 'DSCN6642-2.jpg',                 size: 'md' },
-     { src: 'DSC00766.jpg',                 size: 'md' },
+    { src: 'IMG_9587-2.JPG' },
+    { src: 'P1051707.JPG' },
+    { src: 'P1079588.JPG' },
+    { src: 'Untitled_20250628_155041.jpg' },
+    { src: 'Untitled-6.jpg' },
+    { src: 'P1081468.jpg' },
+    { src: 'P1092662.JPG' },
+    { src: 'IMG_0177.jpg' },
+    { src: 'P1010315.jpg' },
+    { src: 'P1010319.jpg' },
+    { src: 'P1010268.jpg' },
+    { src: 'P1094019.jpg' },
+    { src: 'DSCN6642-2.jpg' },
+    { src: 'DSC00766.jpg' },
   ];
 
-  const SIZES = {
-    sm: { w: [15, 25], h: [12, 22] },
-    md: { w: [28, 45], h: [24, 40] },
-    lg: { w: [50, 72], h: [44, 65] },
-  };
-
-  // how long each photo stays visible (ms) — randomised each time
   const DURATION_MIN = 1000;
   const DURATION_MAX = 3000;
+  const FADE_MIN = 300;
+  const FADE_MAX = 800;
 
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
+  function makeSlide(photo, fadeDuration) {
     const el = document.createElement('a');
     el.className = 'slide';
     el.href = '/works.html';
-    el.style.cssText = `
-      width:${wPct}vw;
-      height:${hPct}vh;
-      transition: opacity ${fadeDuration}ms ease;
-    `;
+    el.style.transition = `opacity ${fadeDuration}ms ease`;
 
     const img = document.createElement('img');
     img.src = photo.src;
     img.alt = '';
     img.draggable = false;
+    img.style.maxWidth = randInt(20, 70) + 'vw';
 
     el.appendChild(img);
     return el;
@@ -149,20 +141,15 @@
     const slide = makeSlide(photo, fadeDuration);
     stage.appendChild(slide);
 
-    // fade in
     requestAnimationFrame(() => {
       requestAnimationFrame(() => slide.classList.add('visible'));
     });
 
-    // fade out old slide after new one starts appearing
     if (current) {
       const old = current;
-      const oldFade = randInt(FADE_MIN, FADE_MAX);
-      old.style.transition = `opacity ${oldFade}ms ease`;
-      setTimeout(() => {
-        old.classList.remove('visible');
-        old.addEventListener('transitionend', () => old.remove(), { once: true });
-      }, fadeDuration * 0.3);
+      old.style.transition = 'none';
+      old.classList.remove('visible');
+      old.remove();
     }
 
     current = slide;
