@@ -3,17 +3,53 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Haute — Jennie Park</title>
+  <title>haute***</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html, body {
       width: 100%; height: 100%;
       background: #ffffff;
-      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
-      font-size: 0.85rem;
-      color: #111;
       overflow: hidden;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    #viewer {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+    }
+
+    canvas {
+      display: block;
+      max-height: 100vh;
+    }
+
+    #hit-left, #hit-right {
+      position: fixed;
+      top: 0;
+      width: 50%;
+      height: 100%;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    #hit-left  { left: 0; }
+    #hit-right { right: 0; }
+
+    #counter {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      z-index: 20;
+      pointer-events: none;
     }
 
     #nav {
@@ -24,6 +60,9 @@
       flex-direction: column;
       gap: 0.4rem;
       z-index: 999;
+      font-size: 0.85rem;
+      letter-spacing: 0.01em;
+      mix-blend-mode: multiply;
     }
 
     #nav a {
@@ -34,180 +73,131 @@
 
     #nav a:hover { opacity: 0.4; }
 
-    #viewer {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    #canvas-container {
-      position: relative;
-      height: 88vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    canvas {
-      height: 100%;
-      width: auto;
-      max-width: 94vw;
-      box-shadow: 0 2px 24px rgba(0,0,0,0.08);
-      transition: opacity 0.25s ease;
-    }
-
-    canvas.hidden { opacity: 0; }
-
-    .arrow {
-      position: fixed;
-      top: 50%;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 1rem;
-      font-size: 1rem;
-      color: #111;
-      opacity: 0.3;
-      transition: opacity 0.15s;
-      z-index: 999;
-      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
-    }
-
-    .arrow:hover { opacity: 1; }
-    .arrow:disabled { opacity: 0.1; cursor: default; }
-
-    #prev { left: 0.5rem; }
-    #next { right: 0.5rem; }
-
-    #counter {
-      position: fixed;
-      bottom: 1.8rem;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.72rem;
-      color: #999;
-      letter-spacing: 0.05em;
-      z-index: 999;
-    }
-
-    #pdf-link {
-      position: fixed;
-      top: 2rem;
-      right: 2rem;
-      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
-      font-size: 0.85rem;
-      color: #111;
-      text-decoration: none;
-      z-index: 999;
-      transition: opacity 0.15s;
-    }
-
-    #pdf-link:hover { opacity: 0.4; }
-
     #loading {
       position: fixed;
       inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 0.75rem;
-      color: #999;
+      font-size: 0.85rem;
+      color: #aaa;
       letter-spacing: 0.05em;
     }
   </style>
 </head>
 <body>
 
-<nav id="nav">
-  <a href="/">home</a>
-  <a href="/works.html">works</a>
-</nav>
-
-<a href="https://drive.google.com/file/d/140Z9A4a7aymyHAfnQ2Y4jDAmaNroupMb/view?usp=sharing" target="_blank" id="pdf-link">view pdf</a>
-
+  <a href="https://drive.google.com/file/d/140Z9A4a7aymyHAfnQ2Y4jDAmaNroupMb/view?usp=sharing" target="_blank" id="pdf-link">view pdf</a>
+ 
 <div id="loading">loading...</div>
-
+ 
 <div id="viewer" style="display:none">
   <div id="canvas-container">
     <canvas id="pdf-canvas"></canvas>
   </div>
 </div>
 
-<button class="arrow" id="prev">&#8592;</button>
-<button class="arrow" id="next">&#8594;</button>
+<nav id="nav">
+  <a href="index.html">index</a>
+  <a href="works.html">works</a>
+  <a href="cv.html">cv</a>
+</nav>
+
+<div id="loading">loading...</div>
+<div id="viewer"></div>
+<div id="hit-left"></div>
+<div id="hit-right"></div>
 <div id="counter"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
   const PDF_URL = 'HAUTEFINALPRINT.pdf';
-  const canvas  = document.getElementById('pdf-canvas');
-  const ctx     = canvas.getContext('2d');
-  const prevBtn = document.getElementById('prev');
-  const nextBtn = document.getElementById('next');
+  const viewer  = document.getElementById('viewer');
   const counter = document.getElementById('counter');
   const loading = document.getElementById('loading');
-  const viewer  = document.getElementById('viewer');
 
-  let pdfDoc   = null;
-  let current  = 1;
-  let rendering = false;
+  let pdf       = null;
+  let numPages  = 0;
+  let spread    = 0; // 0 = cover (page 1 alone), 1 = pages 2-3, 2 = pages 4-5 ...
 
-  async function renderPage(n) {
-    if (rendering) return;
-    rendering = true;
-
-    canvas.classList.add('hidden');
-
-    const page     = await pdfDoc.getPage(n);
-    const viewport = page.getViewport({ scale: 2 });
-
-    canvas.width  = viewport.width;
-    canvas.height = viewport.height;
-
-    await page.render({ canvasContext: ctx, viewport }).promise;
-
-    canvas.classList.remove('hidden');
-    rendering = false;
-
-    counter.textContent = n + ' / ' + pdfDoc.numPages;
-    prevBtn.disabled = n <= 1;
-    nextBtn.disabled = n >= pdfDoc.numPages;
-
-    // preload next
-    if (n < pdfDoc.numPages) pdfDoc.getPage(n + 1);
+  // Returns array of 1-indexed page numbers for current spread
+  function spreadPages() {
+    if (spread === 0) return [1];
+    const left = spread * 2;      // page 2, 4, 6 ...
+    const right = left + 1;
+    return right <= numPages ? [left, right] : [left];
   }
 
-  async function go(dir) {
-    const next = current + dir;
-    if (next < 1 || next > pdfDoc.numPages) return;
-    current = next;
-    await renderPage(current);
+  function totalSpreads() {
+    return 1 + Math.ceil((numPages - 1) / 2);
   }
 
-  prevBtn.addEventListener('click', () => go(-1));
-  nextBtn.addEventListener('click', () => go(1));
+  async function renderPage(pageNum, maxH) {
+    const page     = await pdf.getPage(pageNum);
+    const viewport = page.getViewport({ scale: 1 });
+    const scale    = maxH / viewport.height;
+    const scaled   = page.getViewport({ scale });
+
+    const canvas   = document.createElement('canvas');
+    canvas.width   = scaled.width;
+    canvas.height  = scaled.height;
+
+    await page.render({
+      canvasContext: canvas.getContext('2d'),
+      viewport: scaled,
+    }).promise;
+
+    return canvas;
+  }
+
+  async function showSpread() {
+    viewer.innerHTML = '';
+    const pages  = spreadPages();
+    const maxH   = window.innerHeight;
+
+    const canvases = await Promise.all(pages.map(p => renderPage(p, maxH)));
+    canvases.forEach(c => viewer.appendChild(c));
+
+    const total = totalSpreads();
+    counter.textContent = `${spread + 1} / ${total}`;
+  }
+
+  function prev() {
+    if (spread > 0) { spread--; showSpread(); }
+  }
+
+  function next() {
+    if (spread < totalSpreads() - 1) { spread++; showSpread(); }
+  }
+
+  document.getElementById('hit-left').addEventListener('click', prev);
+  document.getElementById('hit-right').addEventListener('click', next);
 
   document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowRight') go(1);
-    if (e.key === 'ArrowLeft')  go(-1);
+    if (e.key === 'ArrowLeft')  prev();
+    if (e.key === 'ArrowRight') next();
   });
 
-  document.getElementById('viewer').addEventListener('click', e => {
-    const mid = window.innerWidth / 2;
-    if (e.clientX > mid) go(1); else go(-1);
+  // touch swipe
+  let touchX = null;
+  document.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; });
+  document.addEventListener('touchend', e => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 40) { dx < 0 ? next() : prev(); }
+    touchX = null;
   });
 
-  pdfjsLib.getDocument(PDF_URL).promise.then(pdf => {
-    pdfDoc = pdf;
-    loading.style.display = 'none';
-    viewer.style.display  = 'flex';
-    renderPage(1);
-  });
+  (async () => {
+    const loadingTask = pdfjsLib.getDocument(PDF_URL);
+    pdf      = await loadingTask.promise;
+    numPages = pdf.numPages;
+    loading.remove();
+    showSpread();
+  })();
 </script>
 </body>
 </html>
