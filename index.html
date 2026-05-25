@@ -170,11 +170,6 @@
     el.style.top  = pos.y + 'vh';
     el.style.setProperty('--reveal-dur', revealDur + 'ms');
 
-    // we need to know image natural size before building halves
-    const probe = new Image();
-    probe.onload = () => {
-      const natW = probe.naturalWidth;
-      const natH = probe.naturalHeight;
 
       // compute rendered size based on maxWidth constraint
       const maxW = window.innerWidth * sizePct / 100;
@@ -186,35 +181,6 @@
       el.style.width  = rW + 'px';
       el.style.height = rH + 'px';
 
-      // top half
-      const topDiv = document.createElement('div');
-      topDiv.className = 'reveal-top';
-      const topImg = document.createElement('img');
-      topImg.src = photo.src;
-      topImg.style.width  = rW + 'px';
-      topImg.style.height = rH + 'px';
-      topDiv.appendChild(topImg);
-
-      // bottom half
-      const botDiv = document.createElement('div');
-      botDiv.className = 'reveal-bot';
-      const botImg = document.createElement('img');
-      botImg.src = photo.src;
-      botImg.style.width  = rW + 'px';
-      botImg.style.height = rH + 'px';
-      botDiv.appendChild(botImg);
-
-      el.appendChild(topDiv);
-      el.appendChild(botDiv);
-      stage.appendChild(el);
-
-      // trigger reveal — halves grow from centre outward
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          topDiv.style.height = (rH / 2) + 'px';
-          botDiv.style.height = (rH / 2) + 'px';
-        });
-      });
 
       // remove old slide once new one has revealed
       if (current) {
