@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>haute zine</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #ffffff;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #111;
+    }
+
+    .nav {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 999;
+      letter-spacing: 0.01em;
+      mix-blend-mode: multiply;
+    }
+
+    .nav a {
+      color: #111;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .nav a:hover { opacity: 0.4; }
+
+    .content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 8rem 2rem 6rem;
+      display: flex;
+      flex-direction: column;
+      gap: 4rem;
+    }
+
+    /* pdf viewer */
+    #pdf-viewer {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    #pdf-canvas {
+      width: 100%;
+      display: block;
+    }
+
+    .pdf-controls {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+    }
+
+    .pdf-controls button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.05em;
+      padding: 0;
+      transition: color 0.15s;
+    }
+
+    .pdf-controls button:hover { color: #111; }
+
+    /* images */
+    .img-block {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .img-block img {
+      width: 100%;
+      display: block;
+    }
+
+    .caption {
+      font-size: 0.75rem;
+      color: #aaa;
+      letter-spacing: 0.03em;
+    }
+
+    /* instagram */
+    .insta-block {
+      display: flex;
+      justify-content: center;
+    }
+
+    .insta-block .instagram-media {
+      margin: 0 !important;
+    }
+
+    /* image grid for the four others */
+    .img-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .img-grid img {
+      width: 100%;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html">home</a>
+  <a href="works.html">works</a>
+  <a href="cv.html">cv</a>
+</div>
+
+<div class="content">
+
+  <!-- PDF viewer -->
+  <div id="pdf-viewer">
+    <canvas id="pdf-canvas"></canvas>
+    <div class="pdf-controls">
+      <button id="prev">←</button>
+      <span id="page-counter">1 / 1</span>
+      <button id="next">→</button>
+    </div>
+  </div>
+
+  <!-- single image with caption -->
+  <div class="img-block">
+    <img src="northmarketsouth2.jpg" alt="" />
+    <span class="caption"><!-- insert caption here --></span>
+  </div>
+
+  <!-- instagram embed -->
+  <div class="insta-block">
+    <blockquote
+      class="instagram-media"
+      data-instgrm-permalink="https://www.instagram.com/p/DTK6Wyokv0J/"
+      data-instgrm-version="14"
+      style="max-width:540px; width:100%;">
+    </blockquote>
+  </div>
+
+  <!-- four more images -->
+  <div class="img-grid">
+    <img src="IMAGE1.jpg" alt="" />
+    <img src="IMAGE2.jpg" alt="" />
+    <img src="IMAGE3.jpg" alt="" />
+    <img src="IMAGE4.jpg" alt="" />
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script async src="//www.instagram.com/embed.js"></script>
+<script>
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  const PDF_URL = '/zinefw.pdf';
+  const canvas  = document.getElementById('pdf-canvas');
+  const ctx     = canvas.getContext('2d');
+  const counter = document.getElementById('page-counter');
+
+  let pdf      = null;
+  let numPages = 0;
+  let page     = 1;
+
+  async function renderPage(num) {
+    const p        = await pdf.getPage(num);
+    const dpr      = window.devicePixelRatio || 1;
+    const viewport = p.getViewport({ scale: 1 });
+    const scale    = (canvas.parentElement.clientWidth / viewport.width) * dpr;
+    const scaled   = p.getViewport({ scale });
+
+    canvas.width        = scaled.width;
+    canvas.height       = scaled.height;
+    canvas.style.width  = (scaled.width  / dpr) + 'px';
+    canvas.style.height = (scaled.height / dpr) + 'px';
+
+    await p.render({ canvasContext: ctx, viewport: scaled }).promise;
+    counter.textContent = `${num} / ${numPages}`;
+  }
+
+  document.getElementById('prev').addEventListener('click', () => {
+    if (page > 1) { page--; renderPage(page); }
+  });
+
+  document.getElementById('next').addEventListener('click', () => {
+    if (page < numPages) { page++; renderPage(page); }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft'  && page > 1)        { page--; renderPage(page); }
+    if (e.key === 'ArrowRight' && page < numPages)  { page++; renderPage(page); }
+  });
+
+  (async () => {
+    try {
+      pdf      = await pdfjsLib.getDocument(PDF_URL).promise;
+      numPages = pdf.numPages;
+      renderPage(page);
+    } catch (e) {
+      canvas.style.display = 'none';
+      document.getElementById('page-counter').textContent = 'could not load pdf';
+    }
+  })();
+</script>
+</body>
+</html>
