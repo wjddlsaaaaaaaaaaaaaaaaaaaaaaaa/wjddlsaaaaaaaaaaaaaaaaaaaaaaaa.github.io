@@ -166,30 +166,6 @@
     const sizePct = randSize();
     const pos     = randPos();
     const { el, img } = makeSlide(photo, sizePct, pos);
-
-
-    // append immediately so glitch is visible
-    if (current) current.remove();
-    stage.appendChild(el);
-    current = el;
-
-    let step = 0;
-    const flicker = () => {
-      if (step < glitchSrcs.length) {
-        img.src = glitchSrcs[step];
-        step++;
-        setTimeout(flicker, isIntro ? randInt(20, 80) : randInt(30, 100));
-      } else {
-        img.src = photo.src;
-        if (isIntro && idx === 1) {
-          isIntro = false;
-        }
-        setTimeout(showNext, randInt(DURATION_MIN, DURATION_MAX));
-      }
-    };
-
-    img.src = glitchSrcs[0] || photo.src;
-    flicker();
   }
 
   function showWorkLink() {
