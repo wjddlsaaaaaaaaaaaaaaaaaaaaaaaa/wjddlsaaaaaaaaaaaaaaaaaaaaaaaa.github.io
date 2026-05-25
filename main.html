@@ -103,6 +103,36 @@
     { src: 'P1094019.jpg',                size: 'md' },
   ];
 
+    ].map(p => ({ ...p, href: '/works.html', isProject: false }));
+ 
+  // ── PROJECT THUMBNAILS (click → that project page) ────────────
+  // Replace src with an actual image from each project folder
+  const PROJECTS = [
+    { src: 'image1.jpg',   href: '/project1.html',                  title: 'haute***',                        size: 'md' },
+    { src: 'Slide1.jpeg',  href: '/dontwalk.html',                   title: 'dont walk',                       size: 'lg' },
+    { src: 'Slide10.jpeg', href: '/mementomori.html',                title: 'memento mori',                    size: 'md' },
+    { src: 'Slide5.jpeg',  href: '/irememberinflushesandflares.html',title: 'i remember in flushes and flares', size: 'sm' },
+    { src: 'Slide15.jpeg', href: '/artfoundation.html',              title: 'art foundation',                  size: 'md' },
+    { src: 'Slide20.jpeg', href: '/assorted.html',                   title: 'assorted;',                       size: 'lg' },
+  ].map(p => ({ ...p, isProject: true }));
+ 
+  // Mix: roughly one project per every 2–3 personal photos
+  function buildPlaylist() {
+    const personal = [...PERSONAL].sort(() => Math.random() - 0.5);
+    const projects = [...PROJECTS].sort(() => Math.random() - 0.5);
+    const playlist = [];
+    let pi = 0;
+    personal.forEach((p, i) => {
+      playlist.push(p);
+      if ((i + 1) % 3 === 0 && pi < projects.length) {
+        playlist.push(projects[pi++]);
+      }
+    });
+    // append any remaining projects
+    while (pi < projects.length) playlist.push(projects[pi++]);
+    return playlist;
+  }
+
   const SIZES = {
     sm: { w: [15, 25], h: [12, 22] },
     md: { w: [28, 45], h: [24, 40] },
