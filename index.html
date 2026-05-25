@@ -14,44 +14,24 @@
       cursor: crosshair;
     }
 
-    #stage { position: fixed; inset: 0; }
+    #stage {
+      position: fixed;
+      inset: 0;
+    }
 
     .slide {
       position: absolute;
-      display: block;
-      opacity: 0;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
     }
 
-    /* image drives its own proportions */
     .slide img {
       display: block;
-      max-width: 100%;
-      max-height: 100%;
+      max-height: 90vh;
       width: auto;
       height: auto;
     }
-
-    .slide.visible { opacity: 1; }
-
-    /* project label on hover */
-    .slide.project::after {
-      content: attr(data-title);
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      padding: 0.4rem 0.6rem;
-      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
-      font-size: 0.72rem;
-      color: #fff;
-      background: rgba(0,0,0,0.45);
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    .slide.project:hover::after { opacity: 1; }
 
     #nav {
       position: fixed;
@@ -73,7 +53,9 @@
       transition: opacity 0.15s;
     }
 
-    #nav a:hover { opacity: 0.4; }
+    #nav a:hover {
+      opacity: 0.4;
+    }
 
     body::after {
       content: '';
@@ -98,119 +80,66 @@
 </nav>
 
 <script>
-  const PERSONAL = [
-    { src: 'IMG_9587-2.JPG',                 size: 'md' },
-    { src: 'P1051707.JPG',                   size: 'sm' },
-    { src: 'P1079588.JPG',                   size: 'lg' },
-    { src: 'Untitled_20250628_155041.jpg',   size: 'sm' },
-    { src: 'Untitled-6.jpg',                 size: 'lg' },
-    { src: 'P1081468.jpg',                   size: 'md' },
-    { src: 'P1092662.JPG',                   size: 'md' },
-    { src: 'IMG_0177.jpg',                   size: 'lg' },
-    { src: 'P1010315.jpg',                   size: 'md' },
-    { src: 'P1010319.jpg',                   size: 'sm' },
-    { src: 'P1010268.jpg',                   size: 'lg' },
-    { src: 'P1094019.jpg',                   size: 'md' },
-    { src: 'DSCN6642-2.jpg',                 size: 'md' },
-    { src: 'DSC00766.jpg',                   size: 'md' },
-  ].map(p => ({ ...p, href: '/works.html', isProject: false }));
-
-  const PROJECTS = [
-    { src: 'image1.jpg',   href: '/project1.html',                   title: 'haute***',                         size: 'md' },
-    { src: 'Slide1.jpeg',  href: '/dontwalk.html',                    title: 'dont walk',                        size: 'lg' },
-    { src: 'Slide10.jpeg', href: '/mementomori.html',                 title: 'memento mori',                     size: 'md' },
-    { src: 'Slide5.jpeg',  href: '/irememberinflushesandflares.html', title: 'i remember in flushes and flares', size: 'sm' },
-    { src: 'Slide15.jpeg', href: '/artfoundation.html',               title: 'art foundation',                   size: 'md' },
-    { src: 'Slide20.jpeg', href: '/assorted.html',                    title: 'assorted;',                        size: 'lg' },
-  ].map(p => ({ ...p, isProject: true }));
-
-  // size = max dimension constraint (vw for width, vh for height)
-  // image fills within that box but keeps its own proportions
-  const SIZES = {
-    sm: { w: 25,  h: 28 },
-    md: { w: 42,  h: 48 },
-    lg: { w: 68,  h: 72 },
-  };
+  const PHOTOS = [
+    { src: 'IMG_9587-2.JPG' },
+    { src: 'P1051707.JPG' },
+    { src: 'P1079588.JPG' },
+    { src: 'Untitled_20250628_155041.jpg' },
+    { src: 'Untitled-6.jpg' },
+    { src: 'P1081468.jpg' },
+    { src: 'P1092662.JPG' },
+    { src: 'IMG_0177.jpg' },
+    { src: 'P1010315.jpg' },
+    { src: 'P1010319.jpg' },
+    { src: 'P1010268.jpg' },
+    { src: 'P1094019.jpg' },
+    { src: 'DSCN6642-2.jpg' },
+    { src: 'DSC00766.jpg' },
+  ];
 
   const DURATION_MIN = 1000;
   const DURATION_MAX = 3000;
-  const FADE_MIN = 400;
-  const FADE_MAX = 1800;
 
-  const rand    = (a, b) => a + Math.random() * (b - a);
-  const randInt = (a, b) => Math.floor(rand(a, b));
-  const pick    = arr => arr[Math.floor(Math.random() * arr.length)];
-
-  function buildPlaylist() {
-    const personal = [...PERSONAL].sort(() => Math.random() - 0.5);
-    const projects = [...PROJECTS].sort(() => Math.random() - 0.5);
-    const playlist = [];
-    let pi = 0;
-    personal.forEach((p, i) => {
-      playlist.push(p);
-      if ((i + 1) % 3 === 0 && pi < projects.length) playlist.push(projects[pi++]);
-    });
-    while (pi < projects.length) playlist.push(projects[pi++]);
-    return playlist;
-  }
-
-  function makeSlide(photo, fadeDuration) {
-    const bucket = photo.size || 'md';
-    const { w, h } = SIZES[bucket];
-
-    const el = document.createElement('a');
-    el.className = 'slide' + (photo.isProject ? ' project' : '');
-    el.href = photo.href;
-    if (photo.title) el.setAttribute('data-title', photo.title);
-    // constrain max size but let image keep proportions
-    el.style.cssText = `
-      max-width:${w}vw;
-      max-height:${h}vh;
-      transition: opacity ${fadeDuration}ms ease;
-    `;
-
-    const img = document.createElement('img');
-    img.src = photo.src;
-    img.alt = photo.title || '';
-    img.draggable = false;
-
-    el.appendChild(img);
-    return el;
+  function randInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   const stage = document.getElementById('stage');
-  let playlist = buildPlaylist();
   let idx = 0;
   let current = null;
 
   function showNext() {
-    if (idx >= playlist.length) { playlist = buildPlaylist(); idx = 0; }
+    const photo = PHOTOS[idx % PHOTOS.length];
+    idx++;
 
-    const photo = playlist[idx++];
-    const fadeDuration = randInt(FADE_MIN, FADE_MAX);
-    const stayDuration = randInt(DURATION_MIN, DURATION_MAX);
+    const img = document.createElement('img');
+    img.src = photo.src;
+    img.alt = '';
+    img.draggable = false;
+    img.style.maxWidth = randInt(20, 70) + 'vw';
+    img.style.maxHeight = '90vh';
+    img.style.width = 'auto';
+    img.style.height = 'auto';
+    img.style.display = 'block';
 
-    const slide = makeSlide(photo, fadeDuration);
-    stage.appendChild(slide);
+    const el = document.createElement('a');
+    el.className = 'slide';
+    el.href = '/works.html';
+    el.appendChild(img);
 
-    requestAnimationFrame(() => {
-      requestAnimationFrame(() => slide.classList.add('visible'));
-    });
+    img.onload = () => {
+      if (current) {
+        current.remove();
+      }
+      stage.appendChild(el);
+      current = el;
+      setTimeout(showNext, randInt(DURATION_MIN, DURATION_MAX));
+    };
 
-    if (current) {
-      const old = current;
-      const oldFade = randInt(FADE_MIN, FADE_MAX);
-      old.style.transition = `opacity ${oldFade}ms ease`;
-      setTimeout(() => {
-        old.classList.remove('visible');
-        old.addEventListener('transitionend', () => old.remove(), { once: true });
-      }, fadeDuration * 0.3);
-    }
-
-    current = slide;
-    setTimeout(showNext, stayDuration + fadeDuration);
+    img.onerror = () => showNext();
   }
 
+  PHOTOS.sort(() => Math.random() - 0.5);
   showNext();
 </script>
 </body>
