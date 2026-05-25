@@ -115,19 +115,6 @@
   const DURATION_MIN = 1000;
   const DURATION_MAX = 3000;
 
-  // how long the fade transition takes (ms) — randomised each time
-  const FADE_MIN = 200;
-  const FADE_MAX = 400;
-
-  const rand = (a, b) => a + Math.random() * (b - a);
-  const randInt = (a, b) => Math.floor(rand(a, b));
-  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
-
-  function makeSlide(photo, fadeDuration) {
-    const bucket = photo.size || pick(['sm', 'md', 'md', 'lg']);
-    const { w, h } = SIZES[bucket];
-    const wPct = rand(...w);
-    const hPct = rand(...h);
 
     const el = document.createElement('a');
     el.className = 'slide';
