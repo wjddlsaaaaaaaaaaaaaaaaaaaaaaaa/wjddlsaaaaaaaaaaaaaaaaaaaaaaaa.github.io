@@ -1,92 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CV — Jennie Park</title>
-  <link rel="stylesheet" href="cv.css">
-</head>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html, body {
+      background: #ffffff;
+      color: #111;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    body {
+      padding: 2rem;
+    }
+
+    #nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 3rem;
+    }
+
+    #nav a {
+      color: #111;
+      text-decoration: none;
+      transition: opacity 0.15s;
+      width: fit-content;
+    }
+
+    #nav a:hover {
+      opacity: 0.4;
+    }
+
+    .cv-section {
+      margin-bottom: 2.4rem;
+    }
+
+    .cv-section h2 {
+      font-size: 0.85rem;
+      font-weight: normal;
+      margin-bottom: 1rem;
+      text-transform: lowercase;
+    }
+
+    .cv-row {
+      display: grid;
+      grid-template-columns: 3rem 1fr;
+      gap: 0 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .cv-year {
+      color: #111;
+      white-space: nowrap;
+    }
+
+    .cv-item em {
+      font-style: italic;
+    }
+  </style>
+</head>
 <body>
 
-<div class="cv-container">
+<nav id="nav">
+  <a href="/main.html">home</a>
+  <a href="/works.html">works</a>
+  <a href="/about.html">about</a>
+</nav>
 
-  <!-- INTRO -->
-  <p class="cv-intro">
-    Jennie Park (b. Seoul, KR) is an artist working across photography + moving image.
-  </p>
+<div class="cv-section">
+  <h2>selected experience</h2>
 
-  <!-- EXPERIENCE -->
-  <section class="cv-section">
-    <h2 class="cv-section-title">Selected Experience</h2>
-
-    <article class="cv-entry">
-      <span class="cv-year">2026</span>
-      <p class="cv-text"><em>Haute</em> — Creative Director</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2026</span>
-      <p class="cv-text"><em>DONT WALK</em> — Photographer</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2026</span>
-      <p class="cv-text"><em>Hard Pill (Fringe Festival)</em> — Assistant Producer</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2024</span>
-      <p class="cv-text"><em>Treebox Productions</em> — Assistant Director</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2026</span>
-      <p class="cv-text"><em>Fivehundredthousand</em> — Media Team</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2026</span>
-      <p class="cv-text"><em>Naff</em> — Creative Team</p>
-    </article>
-  </section>
-
-  <!-- AWARDS -->
-  <section class="cv-section">
-    <h2 class="cv-section-title">Awards</h2>
-
-    <article class="cv-entry">
-      <span class="cv-year">2024</span>
-      <p class="cv-text">MCB School Prize Winner</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2024</span>
-      <p class="cv-text">Cinemagic Young Filmmaker Award</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2023</span>
-      <p class="cv-text">MCB School Prize Winner</p>
-    </article>
-  </section>
-
-  <!-- EDUCATION -->
-  <section class="cv-section">
-    <h2 class="cv-section-title">Education</h2>
-
-    <article class="cv-entry">
-      <span class="cv-year">2028</span>
-      <p class="cv-text">MA (Hons) Art History & Philosophy, University of St Andrews</p>
-    </article>
-
-    <article class="cv-entry">
-      <span class="cv-year">2024</span>
-      <p class="cv-text">Art + Design Foundation Year, York College</p>
-    </article>
-  </section>
-
+  <div class="cv-row">
+    <span class="cv-year">2026</span>
+    <span class="cv-item"><em>HAUTE</em> — Creative Director</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2026</span>
+    <span class="cv-item"><em>DONT WALK</em> — Photographer</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2026</span>
+    <span class="cv-item"><em>Hard Pill (Fringe Festival)</em> — Assistant Producer</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2026</span>
+    <span class="cv-item"><em>Fivehundredthousand</em> — Media Team</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2026</span>
+    <span class="cv-item"><em>Naff</em> — Creative Team</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2024</span>
+    <span class="cv-item"><em>Treebox Productions</em> — Assistant Director</span>
+  </div>
 </div>
-}
+
+<div class="cv-section">
+  <h2>awards</h2>
+
+  <div class="cv-row">
+    <span class="cv-year">2024</span>
+    <span class="cv-item">MCB School Prize Winner</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2024</span>
+    <span class="cv-item">Cinemagic Young Filmmaker Award</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2023</span>
+    <span class="cv-item">MCB School Prize Winner</span>
+  </div>
+</div>
+
+<div class="cv-section">
+  <h2>education</h2>
+
+  <div class="cv-row">
+    <span class="cv-year">2028</span>
+    <span class="cv-item">MA (Hons) Art History & Philosophy, University of St Andrews</span>
+  </div>
+  <div class="cv-row">
+    <span class="cv-year">2024</span>
+    <span class="cv-item">Art + Design Foundation Year, York College</span>
+  </div>
+</div>
 
 </body>
 </html>
