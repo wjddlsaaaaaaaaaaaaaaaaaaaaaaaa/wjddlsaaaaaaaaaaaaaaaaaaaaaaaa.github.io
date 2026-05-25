@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>wjddls</title>
-  <link rel="stylesheet" href="style.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -15,13 +14,12 @@
       cursor: crosshair;
     }
 
-    #stage {
-      position: fixed;
-      inset: 0;
-    }
+    #stage { position: fixed; inset: 0; }
 
     .slide {
       position: absolute;
+      transform: translate(-50%, -50%);
+      overflow: hidden;
     }
 
     .slide img {
@@ -29,6 +27,37 @@
       width: auto;
       height: auto;
     }
+
+    /* half-and-half reveal: clip from centre outward */
+    .slide .reveal-top,
+    .slide .reveal-bot {
+      position: absolute;
+      left: 0; right: 0;
+      overflow: hidden;
+      transition: height var(--reveal-dur) cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide .reveal-top {
+      top: 0;
+      height: 0;        /* grows down to 50% */
+    }
+
+    .slide .reveal-bot {
+      bottom: 0;
+      height: 0;        /* grows up to 50% */
+    }
+
+    .slide .reveal-top img,
+    .slide .reveal-bot img {
+      position: absolute;
+      left: 0;
+    }
+
+    /* top half: img sits at top of container, no offset */
+    .slide .reveal-top img { top: 0; }
+
+    /* bot half: img sits flush at bottom — offset so it shows the bottom half */
+    .slide .reveal-bot img { bottom: 0; }
 
     .nav {
       position: fixed;
@@ -69,8 +98,7 @@
 <div id="stage"></div>
 
 <div class="nav">
-  <a href="index.html">home</a>
-   <a href="works.html">work</a>
+  <a href="works.html">work</a>
   <a href="about.html">about</a>
   <a href="cv.html">cv</a>
 </div>
@@ -94,7 +122,7 @@
   ];
 
   const WORKS = [
-    { title: 'haute***',                           href: 'haute.html' },
+    { title: 'haute***',                           href: 'project1.html' },
     { title: 'dont walk',                          href: 'dontwalk.html' },
     { title: 'memento mori',                       href: 'mementomori.html' },
     { title: '"i remember in flushes and flares"', href: 'irememberinflushesandflares.html' },
@@ -102,93 +130,128 @@
     { title: 'assorted',                           href: 'assorted.html' },
   ];
 
-  const DURATION_MIN = 1000;
+  const DURATION_MIN = 1200;
   const DURATION_MAX = 4000;
+  const REVEAL_MIN   = 600;   // ms — slowest reveal
+  const REVEAL_MAX   = 1600;  // ms — fastest reveal
 
-  function randInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
+  const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
-  // mostly central, occasionally off-centre
-  function randPos(maxW, maxH) {
-    const offCentre = Math.random() < 0.25;
-    if (offCentre) {
-      // off centre but still within bounds
-      const side = Math.random() < 0.5 ? 'left' : 'right';
-      const x = side === 'left'
-        ? randInt(5, 25)
-        : randInt(65, 85);
-      const y = randInt(10, 75);
-      return { x, y };
-    } else {
-      // central cluster
-      const x = randInt(25, 60);
-      const y = randInt(20, 65);
-      return { x, y };
+  function randPos() {
+    if (Math.random() < 0.25) {
+      const x = Math.random() < 0.5 ? randInt(5, 25) : randInt(65, 85);
+      return { x, y: randInt(10, 75) };
     }
+    return { x: randInt(25, 65), y: randInt(20, 65) };
   }
 
   function randSize() {
-    // drastically varied but won't bleed off screen
-    const sizes = [15, 20, 25, 35, 45, 55, 60];
-    return sizes[randInt(0, sizes.length - 1)];
+    return [15, 20, 25, 35, 45, 55, 60][randInt(0, 6)];
   }
 
   const stage = document.getElementById('stage');
   let current = null;
   let idx = 0;
-  let isIntro = true;
-
-  function makeSlide(photo, sizePct, pos) {
-    const el = document.createElement('a');
-    el.className = 'slide';
-    el.href = 'works.html';
-
-    // position so image stays within viewport
-    el.style.left = pos.x + 'vw';
-    el.style.top  = pos.y + 'vh';
-    el.style.transform = 'translate(-50%, -50%)';
-
-    const img = document.createElement('img');
-    img.alt = '';
-    img.draggable = false;
-    img.style.maxWidth  = sizePct + 'vw';
-    img.style.maxHeight = '80vh';
-
-    el.appendChild(img);
-    return { el, img };
-  }
 
   function showNext() {
     const photo = PHOTOS[idx % PHOTOS.length];
     idx++;
 
-    const sizePct = randSize();
-    const pos     = randPos();
-    const { el, img } = makeSlide(photo, sizePct, pos);
+    const sizePct    = randSize();
+    const pos        = randPos();
+    const revealDur  = randInt(REVEAL_MIN, REVEAL_MAX);
+    const stayDur    = randInt(DURATION_MIN, DURATION_MAX);
+
+    // wrapper
+    const el = document.createElement('a');
+    el.className = 'slide';
+    el.href = 'works.html';
+    el.style.left = pos.x + 'vw';
+    el.style.top  = pos.y + 'vh';
+    el.style.setProperty('--reveal-dur', revealDur + 'ms');
+
+    // we need to know image natural size before building halves
+    const probe = new Image();
+    probe.onload = () => {
+      const natW = probe.naturalWidth;
+      const natH = probe.naturalHeight;
+
+      // compute rendered size based on maxWidth constraint
+      const maxW = window.innerWidth * sizePct / 100;
+      const maxH = window.innerHeight * 0.80;
+      const scale = Math.min(maxW / natW, maxH / natH, 1);
+      const rW = Math.round(natW * scale);
+      const rH = Math.round(natH * scale);
+
+      el.style.width  = rW + 'px';
+      el.style.height = rH + 'px';
+
+      // top half
+      const topDiv = document.createElement('div');
+      topDiv.className = 'reveal-top';
+      const topImg = document.createElement('img');
+      topImg.src = photo.src;
+      topImg.style.width  = rW + 'px';
+      topImg.style.height = rH + 'px';
+      topDiv.appendChild(topImg);
+
+      // bottom half
+      const botDiv = document.createElement('div');
+      botDiv.className = 'reveal-bot';
+      const botImg = document.createElement('img');
+      botImg.src = photo.src;
+      botImg.style.width  = rW + 'px';
+      botImg.style.height = rH + 'px';
+      botDiv.appendChild(botImg);
+
+      el.appendChild(topDiv);
+      el.appendChild(botDiv);
+      stage.appendChild(el);
+
+      // trigger reveal — halves grow from centre outward
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          topDiv.style.height = (rH / 2) + 'px';
+          botDiv.style.height = (rH / 2) + 'px';
+        });
+      });
+
+      // remove old slide once new one has revealed
+      if (current) {
+        const old = current;
+        setTimeout(() => old.remove(), revealDur + 100);
+      }
+      current = el;
+      setTimeout(showNext, stayDur + revealDur);
+    };
+
+    probe.src = photo.src;
   }
 
   function showWorkLink() {
     const work = WORKS[randInt(0, WORKS.length - 1)];
-
     const a = document.createElement('a');
     a.style.cssText = `
       position: fixed;
       z-index: 997;
       font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
       font-size: 0.85rem;
-      color: blue;
-      text-decoration: underline;
+      color: #111;
+      text-decoration: none;
       cursor: pointer;
       left: ${randInt(5, 80)}vw;
       top: ${randInt(10, 85)}vh;
+      opacity: 0;
+      transition: opacity 0.6s ease;
     `;
     a.textContent = work.title;
     a.href = work.href;
-    a.target = '_blank';
-
     document.body.appendChild(a);
-    setTimeout(() => a.remove(), randInt(800, 2500));
+    requestAnimationFrame(() => requestAnimationFrame(() => a.style.opacity = '1'));
+    setTimeout(() => {
+      a.style.opacity = '0';
+      a.addEventListener('transitionend', () => a.remove(), { once: true });
+    }, randInt(1500, 3500));
     setTimeout(showWorkLink, randInt(3000, 8000));
   }
 
