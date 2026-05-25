@@ -23,10 +23,10 @@
       position: absolute;
       display: block;
       opacity: 0;
-      transition: opacity 0.18s ease;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
+      /* transition duration set dynamically via JS */
     }
 
     .slide img {
@@ -88,20 +88,20 @@
 
 <script>
   const PHOTOS = [
-    { src: 'IMG_9587.JPG',                  duration: 1200, size: 'md' },
-    { src: 'P1051711.JPG',                  duration: 800,  size: 'sm' },
-    { src: 'P1079588.JPG',                  duration: 2000, size: 'lg' },
-    { src: 'P1080669.JPG',                  duration: 1000, size: 'sm' },
-    { src: 'P1092662.JPG',                  duration: 1600, size: 'md' },
-    { src: 'Untitled_20250628_155041.jpg',  duration: 900,  size: 'sm' },
-    { src: 'Untitled-6.jpg',               duration: 2200, size: 'lg' },
-    { src: 'P1081468.JPG',                  duration: 1100, size: 'md' },
-    { src: 'P1080652.JPG',                  duration: 700,  size: 'sm' },
-    { src: 'IMG_0177.jpg',                  duration: 1800, size: 'lg' },
-    { src: 'P1010315.jpg',                  duration: 1300, size: 'md' },
-    { src: 'P1010319.jpg',                  duration: 950,  size: 'sm' },
-    { src: 'P1081468.jpg',                  duration: 2100, size: 'lg' },
-    { src: 'P1094019.jpg',                  duration: 1400, size: 'md' },
+    { src: 'IMG_9587.JPG',                 size: 'md' },
+    { src: 'P1051711.JPG',                 size: 'sm' },
+    { src: 'P1079588.JPG',                 size: 'lg' },
+    { src: 'P1080669.JPG',                 size: 'sm' },
+    { src: 'P1092662.JPG',                 size: 'md' },
+    { src: 'Untitled_20250628_155041.jpg', size: 'sm' },
+    { src: 'Untitled-6.jpg',              size: 'lg' },
+    { src: 'P1081468.JPG',                size: 'md' },
+    { src: 'P1080652.JPG',                size: 'sm' },
+    { src: 'IMG_0177.jpg',                size: 'lg' },
+    { src: 'P1010315.jpg',                size: 'md' },
+    { src: 'P1010319.jpg',                size: 'sm' },
+    { src: 'P1081468.jpg',                size: 'lg' },
+    { src: 'P1094019.jpg',                size: 'md' },
   ];
 
   const SIZES = {
@@ -110,11 +110,19 @@
     lg: { w: [50, 72], h: [44, 65] },
   };
 
-  const OVERLAP = 80;
+  // how long each photo stays visible (ms) — randomised each time
+  const DURATION_MIN = 700;
+  const DURATION_MAX = 3000;
+
+  // how long the fade transition takes (ms) — randomised each time
+  const FADE_MIN = 400;
+  const FADE_MAX = 1200;
+
   const rand = (a, b) => a + Math.random() * (b - a);
+  const randInt = (a, b) => Math.floor(rand(a, b));
   const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-  function makeSlide(photo) {
+  function makeSlide(photo, fadeDuration) {
     const bucket = photo.size || pick(['sm', 'md', 'md', 'lg']);
     const { w, h } = SIZES[bucket];
     const wPct = rand(...w);
@@ -122,8 +130,12 @@
 
     const el = document.createElement('a');
     el.className = 'slide';
-    el.href = '/main.html';
-    el.style.cssText = `width:${wPct}vw; height:${hPct}vh;`;
+    el.href = '/works.html';
+    el.style.cssText = `
+      width:${wPct}vw;
+      height:${hPct}vh;
+      transition: opacity ${fadeDuration}ms ease;
+    `;
 
     const img = document.createElement('img');
     img.src = photo.src;
@@ -142,25 +154,30 @@
     const photo = PHOTOS[idx % PHOTOS.length];
     idx++;
 
-    const slide = makeSlide(photo);
+    const fadeDuration = randInt(FADE_MIN, FADE_MAX);
+    const stayDuration = randInt(DURATION_MIN, DURATION_MAX);
+
+    const slide = makeSlide(photo, fadeDuration);
     stage.appendChild(slide);
 
+    // fade in
     requestAnimationFrame(() => {
       requestAnimationFrame(() => slide.classList.add('visible'));
     });
 
-    const duration = photo.duration || 1400;
-
+    // fade out old slide after new one starts appearing
     if (current) {
       const old = current;
+      const oldFade = randInt(FADE_MIN, FADE_MAX);
+      old.style.transition = `opacity ${oldFade}ms ease`;
       setTimeout(() => {
         old.classList.remove('visible');
         old.addEventListener('transitionend', () => old.remove(), { once: true });
-      }, OVERLAP);
+      }, fadeDuration * 0.3);
     }
 
     current = slide;
-    setTimeout(showNext, duration);
+    setTimeout(showNext, stayDuration + fadeDuration);
   }
 
   PHOTOS.sort(() => Math.random() - 0.5);
