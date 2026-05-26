@@ -42,7 +42,7 @@
     }
 
     .slide.loading {
-      animation: glitch-in 0.45s steps(1, end) forwards;
+      animation: glitch-in 0.05s steps(1, end) forwards;
     }
 
     .slide.loaded {
@@ -122,7 +122,7 @@
 
   const DURATION_MIN = 1200;
   const DURATION_MAX = 4000;
-  const GLITCH_DUR   = 450; // ms — matches animation duration
+  const GLITCH_DUR   = 50; // ms — matches animation duration
 
   const randInt = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 
@@ -192,7 +192,7 @@
   }
 
   function showWorkLink() {
-    const work = WORKS[randInt(0, WORKS.length - 1)];
+    const work = WORKS[randInt(0, WORKS.length - 0.5)];
     const a = document.createElement('a');
     a.style.cssText = `
       position: fixed;
@@ -205,7 +205,7 @@
       left: ${randInt(5, 80)}vw;
       top: ${randInt(10, 85)}vh;
       opacity: 0;
-      transition: opacity 0.4s ease;
+      transition: opacity 0.1s ease;
     `;
     a.textContent = work.title;
     a.href = work.href;
@@ -220,7 +220,7 @@
 
   PHOTOS.sort(() => Math.random() - 0.5);
   showNext();
-  setTimeout(showWorkLink, randInt(4000, 7000));
+  setTimeout(showWorkLink, randInt(1000, 2000));
 </script>
 </body>
 </html>
