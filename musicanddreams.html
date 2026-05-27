@@ -1,8 +1,45 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MUSIC AND DREAMS</title>
   <link rel="stylesheet" href="style.css">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #ffffff;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #111;
+    }
+
+    .nav {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 999;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+    }
+
+    .nav a {
+      color: #111;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .nav a:hover { opacity: 0.4; }
+
+    .project-page {
+      width: 100%;
+      padding-top: 6rem;
+    }
+
     .project-image {
       display: block;
       width: 100vw;
@@ -12,26 +49,84 @@
       margin: 0 auto;
     }
 
-    .project-page {
-      width: 100%;
+    .project-header {
+      padding: 3rem 2rem 1.5rem;
+      font-size: 0.85rem;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+    }
+
+    .video-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 0;
+    }
+
+    .video-wrap iframe {
+      width: min(400px, 90vw);
+      height: min(711px, 160vw);
+      border: none;
     }
   </style>
 </head>
-
 <body>
 
-<body>
+<div class="nav">
+  <a href="index.html">home</a>
+  <a href="works.html">works</a>
+  <a href="about.html">about</a>
+  <a href="cv.html">cv</a>
+</div>
 
 <div class="project-page">
 
-   <!-- IMAGES -->
   <img src="Slide23.jpeg" class="project-image">
   <img src="Slide22.jpeg" class="project-image">
 
-  <!-- TITLE -->
-  <div class="project-header">
-    'naff' (2025--)
+  <div class="project-header">'naff' (2025--)</div>
+
+  <img src="bucky.png" class="project-image">
+  <img src="naffposter.png" class="project-image">
+  <img src="naffassorted.png" class="project-image">
+
+  <div class="project-header">'fivehundredthousand' (2025--)</div>
+
+  <div class="video-wrap">
+    <iframe src="https://www.youtube.com/embed/PUCoy9d2tVk"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
   </div>
 
-  <!-- IMAGES -->
-  <img src="Slide1.jpeg" class="project-image">
+  <div class="project-header">'numbers 4 haute' (2026)</div>
+
+    <div class="video-wrap">
+    <iframe src="https://youtube.com/shorts/9M6o-6a40Hk?feature=share"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="project-header">'fingask' (2026)</div>
+
+   <div class="video-wrap">
+    <iframe src="https://youtu.be/Ysp_wmmAvSw"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+  <div class="project-header">'summer of olive'</div>
+
+  <div class="video-wrap">
+    <iframe src="https://youtu.be/BKbn_hVFbco"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+      allowfullscreen>
+    </iframe>
+  </div>
+
+
+</div>
+
+</body>
+</html>
