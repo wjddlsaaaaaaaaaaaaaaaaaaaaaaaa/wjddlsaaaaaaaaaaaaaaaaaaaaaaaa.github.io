@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>dont walk — Jennie Park</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #ffffff;
+      font-family: Helvetica, 'Helvetica Neue', Arial, sans-serif;
+      font-size: 0.85rem;
+      color: #111;
+    }
+
+    .nav {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      z-index: 999;
+      font-size: 0.85rem;
+    }
+
+    .nav a {
+      color: #111;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .nav a:hover { opacity: 0.4; }
+
+    .project-page {
+      width: 100%;
+      padding-top: 6rem;
+    }
+
+    .project-image {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      max-width: 100%;
+      object-fit: contain;
+      margin: 0 auto;
+    }
+
+    .project-header {
+      padding: 3rem 2rem 1.5rem;
+      font-size: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .project-header a {
+      color: #111;
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .project-header a:hover { opacity: 0.4; }
+
+    hr {
+      border: none;
+      border-top: 1px solid #e0e0e0;
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="index.html">home</a>
+  <a href="works.html">works</a>
+  <a href="about.html">about</a>
+  <a href="cv.html">cv</a>
+</div>
+
+<div class="project-page">
+
+  <div class="project-header">
+    dont walk (2025)
+    <a href="https://www.dontwalk.co.uk" target="_blank">dontwalk.co.uk</a>
+    <a href="https://www.instagram.com/dontwalk/" target="_blank">@dontwalk</a>
+  </div>
+
+  <hr>
+  <img src="dw.jpg" class="project-image">
+  <img src="everybodydw.png" class="project-image">
+
+  <hr>
+  <img src="P1081336.jpg" class="project-image">
+  <img src="P1081250.jpg" class="project-image">
+  <img src="P1081311.jpg" class="project-image">
+  <img src="P1081373.jpg" class="project-image">
+
+  <hr>
+  <img src="P1068344-3.jpg" class="project-image">
+  <img src="P1058221-2.jpg" class="project-image">
+
+</div>
+</body>
+</html>
