@@ -48,13 +48,11 @@
       display: flex;
       flex-direction: column;
       gap: 1rem;
-      text-decoration: none;
       color: #111;
     }
 
     .project-media {
       width: 100%;
-      position: relative;
       overflow: hidden;
     }
 
@@ -68,12 +66,6 @@
       display: block;
     }
 
-    .project-media iframe {
-      width: 100%;
-      display: block;
-      border: none;
-    }
-
     .project-meta {
       display: flex;
       justify-content: space-between;
@@ -83,7 +75,11 @@
     .project-title {
       font-size: 0.85rem;
       letter-spacing: 0.01em;
+      text-decoration: none;
+      color: #111;
     }
+
+    .project-title:hover { opacity: 0.4; }
 
     .project-link {
       font-size: 0.75rem;
@@ -100,18 +96,12 @@
       color: #aaa;
     }
 
-    /* pdf viewer */
     .pdf-wrap {
       width: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       gap: 0.75rem;
-    }
-
-    .pdf-wrap canvas {
-      width: 100%;
-      display: block;
     }
 
     .pdf-controls {
@@ -136,7 +126,6 @@
 
     .pdf-controls button:hover { color: #111; }
 
-    /* youtube shorts */
     .shorts-row {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -164,7 +153,10 @@
   <!-- haute*** -->
   <div class="project">
     <div class="pdf-wrap">
-      <canvas id="haute-canvas"></canvas>
+      <div id="haute-spread" style="display:flex; gap:0; width:100%;">
+        <canvas id="haute-canvas-left"  style="width:50%; display:block;"></canvas>
+        <canvas id="haute-canvas-right" style="width:50%; display:block;"></canvas>
+      </div>
       <div class="pdf-controls">
         <button id="haute-prev">←</button>
         <span id="haute-counter">1 / 1</span>
@@ -172,7 +164,7 @@
       </div>
     </div>
     <div class="project-meta">
-      <span class="project-title">haute***</span>
+      <a class="project-title" href="haute.html">haute***</a>
       <span class="project-date">2026</span>
       <a class="project-link" href="haute.html">view →</a>
     </div>
@@ -192,11 +184,11 @@
         allowfullscreen>
       </iframe>
     </div>
-    <div class="project-media">
+    <div class="project-media" style="margin-top:1rem;">
       <img src="dw.jpg" alt="" />
     </div>
     <div class="project-meta">
-      <span class="project-title">dont walk</span>
+      <a class="project-title" href="dontwalk.html">dont walk</a>
       <span class="project-date">2025</span>
       <a class="project-link" href="dontwalk.html">view →</a>
     </div>
@@ -208,7 +200,7 @@
       <img src="haute1.png" alt="" />
     </div>
     <div class="project-meta">
-      <span class="project-title">memento mori</span>
+      <a class="project-title" href="mementomori.html">memento mori</a>
       <span class="project-date">2024</span>
       <a class="project-link" href="mementomori.html">view →</a>
     </div>
@@ -219,11 +211,11 @@
     <div class="project-media">
       <img src="Slide1.jpeg" alt="" />
     </div>
-    <div class="project-media" style="margin-top: 1rem;">
+    <div class="project-media" style="margin-top:1rem;">
       <img src="Slide2.jpeg" alt="" />
     </div>
     <div class="project-meta">
-      <span class="project-title">"i remember in flushes and flares"</span>
+      <a class="project-title" href="irememberinflushesandflares.html">"i remember in flushes and flares"</a>
       <span class="project-date">2025</span>
       <a class="project-link" href="irememberinflushesandflares.html">view →</a>
     </div>
@@ -234,11 +226,11 @@
     <div class="project-media">
       <img src="Slide17.jpeg" alt="" />
     </div>
-    <div class="project-media" style="margin-top: 1rem;">
+    <div class="project-media" style="margin-top:1rem;">
       <img src="P1081250.jpg" alt="" />
     </div>
     <div class="project-meta">
-      <span class="project-title">art foundation</span>
+      <a class="project-title" href="artfoundation.html">art foundation</a>
       <span class="project-date">2024</span>
       <a class="project-link" href="artfoundation.html">view →</a>
     </div>
@@ -249,11 +241,11 @@
     <div class="project-media">
       <img src="IMG_2809.jpg" alt="" />
     </div>
-    <div class="project-media" style="margin-top: 1rem;">
+    <div class="project-media" style="margin-top:1rem;">
       <video src="this could be sexy if i tried 004.mp4" autoplay muted loop playsinline></video>
     </div>
     <div class="project-meta">
-      <span class="project-title">assorted</span>
+      <a class="project-title" href="assorted.html">assorted</a>
       <span class="project-date">2024</span>
       <a class="project-link" href="assorted.html">view →</a>
     </div>
@@ -266,19 +258,32 @@
   pdfjsLib.GlobalWorkerOptions.workerSrc =
     'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-  async function initPDF(url, canvasId, prevId, nextId, counterId) {
-    const canvas  = document.getElementById(canvasId);
-    const ctx     = canvas.getContext('2d');
-    const counter = document.getElementById(counterId);
-    let pdf = null;
-    let page = 1;
-    let numPages = 0;
+  async function initHautePDF() {
+    const canvasL = document.getElementById('haute-canvas-left');
+    const canvasR = document.getElementById('haute-canvas-right');
+    const ctxL    = canvasL.getContext('2d');
+    const ctxR    = canvasR.getContext('2d');
+    const counter = document.getElementById('haute-counter');
+    let pdf       = null;
+    let numPages  = 0;
+    let spread    = 0;
 
-    async function renderPage(num) {
-      const p        = await pdf.getPage(num);
+    function spreadPages() {
+      if (spread === 0) return [1, null];
+      const left  = spread * 2;
+      const right = left + 1;
+      return [left, right <= numPages ? right : null];
+    }
+
+    function totalSpreads() {
+      return 1 + Math.ceil((numPages - 1) / 2);
+    }
+
+    async function renderToCanvas(canvas, ctx, pageNum) {
+      const p        = await pdf.getPage(pageNum);
       const dpr      = window.devicePixelRatio || 1;
       const viewport = p.getViewport({ scale: 1 });
-      const scale    = (canvas.parentElement.clientWidth / viewport.width) * dpr;
+      const scale    = (canvas.parentElement.clientWidth / 2 / viewport.width) * dpr;
       const scaled   = p.getViewport({ scale });
 
       canvas.width        = scaled.width;
@@ -287,28 +292,40 @@
       canvas.style.height = (scaled.height / dpr) + 'px';
 
       await p.render({ canvasContext: ctx, viewport: scaled }).promise;
-      counter.textContent = `${num} / ${numPages}`;
     }
 
-    document.getElementById(prevId).addEventListener('click', () => {
-      if (page > 1) { page--; renderPage(page); }
+    async function showSpread() {
+      const [left, right] = spreadPages();
+      await renderToCanvas(canvasL, ctxL, left);
+      if (right) {
+        canvasR.style.display = 'block';
+        await renderToCanvas(canvasR, ctxR, right);
+      } else {
+        canvasR.style.display = 'none';
+      }
+      counter.textContent = `${spread + 1} / ${totalSpreads()}`;
+    }
+
+    document.getElementById('haute-prev').addEventListener('click', () => {
+      if (spread > 0) { spread--; showSpread(); }
     });
 
-    document.getElementById(nextId).addEventListener('click', () => {
-      if (page < numPages) { page++; renderPage(page); }
+    document.getElementById('haute-next').addEventListener('click', () => {
+      if (spread < totalSpreads() - 1) { spread++; showSpread(); }
     });
 
     try {
-      pdf      = await pdfjsLib.getDocument(url).promise;
+      pdf      = await pdfjsLib.getDocument('/hautehighlightreel.pdf').promise;
       numPages = pdf.numPages;
-      renderPage(page);
+      showSpread();
     } catch (e) {
-      canvas.style.display = 'none';
-      document.getElementById(counterId).textContent = 'could not load pdf';
+      canvasL.style.display = 'none';
+      canvasR.style.display = 'none';
+      counter.textContent   = 'could not load pdf';
     }
   }
 
-  initPDF('/hautehighlightreel.pdf', 'haute-canvas', 'haute-prev', 'haute-next', 'haute-counter');
+  initHautePDF();
 </script>
 </body>
 </html>
